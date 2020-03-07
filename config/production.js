@@ -2,7 +2,8 @@ const config = {
   service: {
     allowOrigin: 'https://baseline.dev'
   },
-  baselineUrl: ''
+  baselineUrl: 'https://baseline.dev/baseline',
+  baselineApiUrl: 'https://api.baseline.dev'
 };
 
 export {

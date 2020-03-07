@@ -1,7 +1,18 @@
 import path from 'path';
 import {homedir} from 'os';
-import {existsSync, mkdirSync} from 'fs';
+import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'fs';
 import {privateDecrypt} from 'crypto';
+import ora from 'ora';
+import open from 'open';
+
+import {post} from './request';
+import config from './config';
+import nunjucks from './nunjucks/nunjucks';
+import Loader from './nunjucks/loader';
+import template from '../report/template';
+
+const templateLoader = new Loader(template);
+const renderEnv = new nunjucks.Environment([templateLoader]);
 
 function getBaselinePath() {
   return path.join(homedir(), '.baseline');
@@ -15,8 +26,8 @@ async function createBaselineSettingsDirIfNotExists() {
   return baselinePath;
 }
 
-async function baseline(serviceKeys, privateKey, passphrase) {
-  serviceKeys = serviceKeys.map(async (service) => {
+function decryptServiceKeys(serviceKeys, privateKey, passphrase) {
+  return serviceKeys.map((service) => {
     try {
       if (service.keys.accessToken) {
         service.keys.accessToken = privateDecrypt({
@@ -34,7 +45,28 @@ async function baseline(serviceKeys, privateKey, passphrase) {
     } catch(e) {
       console.error('Something went wrong');
     }
+    return service;
   });
+}
+
+async function baseline(serviceKeys, privateKey, passphrase) {
+  serviceKeys = decryptServiceKeys(serviceKeys, privateKey, passphrase);
+
+  const spinner = ora({
+    text: 'Baselining services, please be patient.',
+    color: 'white'
+  }).start();
+
+  const users = await post(`${config.baselineApiUrl}/v1/baseline`, serviceKeys);
+
+  spinner.succeed('Baselining complete. Opening results in your browser.');
+
+  const file = renderEnv.render('report.html', {users});
+
+  const out = './report/file.html';
+  writeFileSync(out, file);
+
+  await open(`report/file.html`);
 }
 
 export {

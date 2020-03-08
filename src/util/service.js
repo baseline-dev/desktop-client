@@ -34,7 +34,7 @@ async function getServiceNamesFromCredentials() {
   let serviceNames;
   let credentials = await readFileSync(path.join(baselinePath, 'credentials')).toString('utf8');
   try {
-    credentials = JSON.parse(Buffer.from(credentials, 'base64').toString('utf8'));
+    credentials = parseCredentials(credentials);
     serviceNames = credentials.map((service) => {
       return SERVICES[service.id].name;
     });
@@ -51,7 +51,7 @@ async function getServiceCredentials() {
   const baselinePath = getBaselinePath();
   let credentials = await readFileSync(path.join(baselinePath, 'credentials')).toString('utf8');
   try {
-    credentials = JSON.parse(Buffer.from(credentials, 'base64').toString('utf8'));
+    credentials = parseCredentials(credentials);
   } catch(e) {
     console.log('Error parsing credentials');
   }
@@ -76,6 +76,10 @@ async function useExistingCredentials(serviceNames) {
   return useExistingCredentials;
 }
 
+function parseCredentials(credentials) {
+  return JSON.parse(Buffer.from(credentials, 'base64').toString('ascii'));
+}
+
 function waitForCredentials(port) {
   return new Promise((resolve, reject) => {
     ((async function() {
@@ -86,7 +90,7 @@ function waitForCredentials(port) {
         await stopServer(server);
 
         try {
-          keys = JSON.parse(Buffer.from(keys, 'base64').toString('ascii'));
+          keys = parseCredentials(keys);
           resolve(keys);
         } catch(e) {
           reject(e);
@@ -147,5 +151,6 @@ async function runServiceCredentialFlow(publicKey) {
 }
 
 export {
-  runServiceCredentialFlow
+  runServiceCredentialFlow,
+  parseCredentials
 };

@@ -29,7 +29,14 @@ function post(url, body, options) {
       });
 
       res.on('end', () => {
-        resolve(JSON.parse(body));
+        if (res.statusCode === 500) reject(body.toString());
+
+        try {
+          const response = JSON.parse(body);
+          resolve(response);
+        } catch(e) {
+          reject(e.message);
+        }
       })
     });
 

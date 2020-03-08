@@ -10,7 +10,6 @@ import {PrecompiledLoader} from './nunjucks';
 
 var EnhancePrecompiledLoader = PrecompiledLoader.extend({
   resolve: function(from, to) {
-    console.log(path.normalize(path.join(path.dirname(from), to)))
     return path.normalize(path.join(path.dirname(from), to));
   }
 });

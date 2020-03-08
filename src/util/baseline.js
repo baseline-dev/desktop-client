@@ -10,6 +10,7 @@ import config from './config';
 import nunjucks from './nunjucks/nunjucks';
 import Loader from './nunjucks/loader';
 import template from '../report/template';
+import {exit} from './process';
 
 const templateLoader = new Loader(template);
 const renderEnv = new nunjucks.Environment([templateLoader]);
@@ -57,16 +58,21 @@ async function baseline(serviceKeys, privateKey, passphrase) {
     color: 'white'
   }).start();
 
-  const users = await post(`${config.baselineApiUrl}/v1/baseline`, serviceKeys);
+  try {
+    const users = await post(`${config.baselineApiUrl}/v1/baseline`, serviceKeys);
+    spinner.succeed('Baselining complete. Opening results in your browser.');
 
-  spinner.succeed('Baselining complete. Opening results in your browser.');
+    const file = renderEnv.render('report.html', {users});
 
-  const file = renderEnv.render('report.html', {users});
+    const out = './report/file.html';
+    writeFileSync(out, file);
 
-  const out = './report/file.html';
-  writeFileSync(out, file);
-
-  await open(`report/file.html`);
+    await open(`report/file.html`);
+    exit();
+  } catch(e) {
+    spinner.fail('Failed baselining your accounts.');
+    exit();
+  }
 }
 
 export {

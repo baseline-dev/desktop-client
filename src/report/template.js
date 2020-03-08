@@ -188,7 +188,7 @@ var colno = 0;
 var output = "";
 try {
 var parentTemplate = null;
-output += "<div class=\"sm:mx-2 my-2\">\n    <table class=\"text-left w-full rounded-md\">\n        <thead>\n            <tr>\n                <th class=\"py-2 px-4 font-bold uppercase text-sm text-gray-600\">\n                    Organization\n                </th>\n                <th class=\"py-2 px-4 font-bold uppercase text-sm text-gray-600\">\n                    Organization enforces 2FA\n                </th>\n                <th class=\"py-2 px-4 font-bold uppercase text-sm text-gray-600\">\n                    Permissions\n                </th>\n                <th class=\"py-2 px-4 font-bold uppercase text-sm text-gray-600\">\n                    Id\n                </th>\n            </tr>\n        </thead>\n        ";
+output += "<div class=\"sm:mx-2 my-2\">\n    <table class=\"text-left w-full rounded-md\">\n        <thead>\n            <tr>\n                <th class=\"py-2 px-4 font-bold uppercase text-sm text-gray-600\">\n                    Organization\n                </th>\n                <th class=\"py-2 px-4 font-bold uppercase text-sm text-gray-600\">\n                    Organization enforces 2FA\n                </th>\n                <th class=\"py-2 px-4 font-bold uppercase text-sm text-gray-600\">\n                    Id\n                </th>\n            </tr>\n        </thead>\n        ";
 frame = frame.push();
 var t_3 = runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "service")),"items");
 if(t_3) {t_3 = runtime.fromIterator(t_3);
@@ -208,8 +208,6 @@ output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((t_4)
 output += "</td>\n            <td class=\"py-2 px-4\"><i class=\"fas ";
 output += runtime.suppressValue((runtime.memberLookup((runtime.memberLookup((t_4),"organization")),"enforces2fa")?"fa-check":"fa-times"), env.opts.autoescape);
 output += " fa-1x\"/></td>\n            <td class=\"py-2 px-4\">";
-output += runtime.suppressValue(runtime.memberLookup((t_4),"permissions"), env.opts.autoescape);
-output += "</td>\n            <td class=\"py-2 px-4\">";
 output += runtime.suppressValue(runtime.memberLookup((t_4),"id"), env.opts.autoescape);
 output += "</td>\n        </tr>\n        ";
 ;

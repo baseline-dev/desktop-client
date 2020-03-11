@@ -1,10 +1,10 @@
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'fs';
 import path from 'path';
-import ora from 'ora';
 import prompts from 'prompts';
 import open from 'open';
 import querystring from 'querystring';
 import {homedir} from 'os';
+import chalk from 'chalk';
 
 import {getBaselinePath} from './baseline';
 import {getAvailablePort} from './port';
@@ -60,14 +60,16 @@ async function getServiceCredentials() {
 }
 
 async function useExistingCredentials(serviceNames) {
-  let prompt = `You have stored credentials for the following service: ${serviceNames.join(', ')}. Would you like to use these credentials?`;
+  let prompt = `\n  You have stored credentials for the following service: ${serviceNames.join(', ')}.`;
   if (serviceNames.length > 1) {
-    prompt = `You have stored credentials for the following services: ${serviceNames.join(', ')}. Would you like to use these credentials?`;
+    prompt = `\n  You have stored credentials for the following services: ${serviceNames.join(', ')}.`;
   }
+  console.log(prompt);
+
   const {useExistingCredentials} = await prompts({
     type: 'confirm',
     name: 'useExistingCredentials',
-    message: prompt,
+    message: `Would you like to use these credentials to baseline ${serviceNames.join(', ')}?`,
     initial: true
   });
 
@@ -120,37 +122,31 @@ async function handleKeys(keys) {
   await writeFileSync(file, keys);
 }
 
-async function runServiceCredentialFlow(publicKey) {
+async function runServiceCredentialFlow(publicKey, spinner) {
   // Now we check if there are already services we want to baseline.
-  let credentials, spinner;
+  let credentials;
   const serviceNames = await getServiceNamesFromCredentials();
   const shouldCreateNewServiceCredentials = (serviceNames && !await useExistingCredentials(serviceNames)) || !serviceNames;
   if (shouldCreateNewServiceCredentials) {
     const port = await getAvailablePort();
-
-    spinner = ora({
-      text: 'Opening browser to get service credentials.',
-      color: 'white'
-    }).start();
+    spinner.text = chalk.bold('Opening browser to get service credentials.');
+    spinner.start();
 
     await generateUrl(publicKey, port);
 
     credentials = await waitForCredentials(port);
   } else {
-    spinner = ora({
-      text: 'Loading credentials from disk.',
-      color: 'white'
-    }).start();
+    spinner.text = chalk.bold('Loading service credentials.');
+    spinner.start();
 
     credentials = await getServiceCredentials();
   }
-
-  spinner.succeed();
 
   return {credentials};
 }
 
 export {
   runServiceCredentialFlow,
-  parseCredentials
+  parseCredentials,
+  SERVICES
 };

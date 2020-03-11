@@ -1,5 +1,5 @@
 function exit() {
-  console.log('Bye!');
+  console.log('\n  👋 Bye friendly human, until next time!\n');
   process.exit();
 }
 

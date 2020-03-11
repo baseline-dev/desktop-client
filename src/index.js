@@ -3,11 +3,15 @@
 import {runPublicPrivateKeyFlow} from './util/keys';
 import {runServiceCredentialFlow} from './util/service';
 import {baseline} from './util/baseline';
+import ora from 'ora';
 
 async function main() {
+  console.log(`\n  👋 Hi friend! Let's get started.`);
   const {passphrase, privateKey, publicKey} = await runPublicPrivateKeyFlow();
-  const {credentials} = await runServiceCredentialFlow(publicKey);
-  await baseline(credentials, privateKey, passphrase);
+
+  const spinner = new ora({});
+  const {credentials} = await runServiceCredentialFlow(publicKey, spinner);
+  await baseline(credentials, privateKey, passphrase, spinner);
 }
 
 export {main};

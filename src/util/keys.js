@@ -3,6 +3,7 @@ import path from 'path';
 import prompts from 'prompts';
 import {existsSync, writeFileSync, readFileSync} from 'fs';
 import {generateKeyPair as cryptoGenerateKeyPair, createPrivateKey} from 'crypto';
+import chalk from 'chalk';
 
 import {createBaselineSettingsDirIfNotExists, getBaselinePath} from './baseline';
 import {exit} from './process';
@@ -23,9 +24,8 @@ function isValidPassphrase(privateKey, passphrase) {
       'passphrase': passphrase
     });
     isValid = true;
-  } catch(e) {
-    console.log('Invalid passphrase');
-  }
+  } catch(e) {}
+
   return isValid;
 }
 
@@ -49,8 +49,10 @@ async function getKeys() {
 
 async function generateKeyPair(passphrase) {
   return await (new Promise((resolve, reject) => {
+    if (!passphrase) exit();
+
     let spinner = ora({
-      text: 'Generating public/private key pair.',
+      text: chalk.bold('Generating public/private key pair.'),
       color: 'white'
     }).start();
 
@@ -99,35 +101,31 @@ async function useExistingKeys() {
 async function runPublicPrivateKeyFlow() {
   let passphrase, privateKey, publicKey;
   const baselineKeysExist = await keysExist();
-  const shouldCreateNewKeys = (baselineKeysExist && !await useExistingKeys()) || !baselineKeysExist;
 
-  if (shouldCreateNewKeys) {
+  if (!baselineKeysExist) {
+    console.log(`\n  To keep things secure, we neet to setup a private key for you.`);
     ({passphrase} = await prompts({
       type: 'password',
       name: 'passphrase',
-      message: 'Creating a new private/public key pair. Please enter a passphrase to encrypt the access tokens.',
+      message: 'Please enter a passphrase to encrypt the service access keys.',
       validate: value => value.length < 4 ? `Please enter at least 4 characters` : true
     }));
 
     ({privateKey, publicKey} = await generateKeyPair(passphrase));
   } else {
-    ({passphrase} = await prompts({
-      type: 'password',
-      name: 'passphrase',
-      message: 'Please enter the passphrase of the private key to decrypt the service keys.'
-    }));
+    console.log(`\n  Since you already have baselined before, we can dive right in.`);
 
     ({privateKey, publicKey} = await getKeys());
 
-    while (!isValidPassphrase(privateKey, passphrase)) {
-      ({passphrase} = await prompts({
-        type: 'password',
-        name: 'passphrase',
-        message: 'Please try again and enter the passphrase of the private key to decrypt the service keys.'
-      }));
-
-      if (typeof passphrase === 'undefined') exit();
-    }
+    ({passphrase} = await prompts({
+      type: 'password',
+      name: 'passphrase',
+      message: 'Please enter the passphrase to decrypt the service access keys.',
+      validate: (value) => {
+        const isValid = isValidPassphrase(privateKey, value);
+        return isValid || 'Please enter the correct passphrase.'
+      }
+    }));
   }
 
   return {passphrase, privateKey, publicKey};

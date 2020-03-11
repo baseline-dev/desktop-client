@@ -4,6 +4,7 @@ import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'fs';
 import {privateDecrypt} from 'crypto';
 import ora from 'ora';
 import open from 'open';
+import chalk from 'chalk';
 
 import {post} from './request';
 import config from './config';
@@ -11,6 +12,7 @@ import nunjucks from './nunjucks/nunjucks';
 import Loader from './nunjucks/loader';
 import template from '../report/template';
 import {exit} from './process';
+import {SERVICES} from './service';
 
 const templateLoader = new Loader(template);
 const renderEnv = new nunjucks.Environment([templateLoader]);
@@ -44,23 +46,20 @@ function decryptServiceKeys(serviceKeys, privateKey, passphrase) {
         }, Buffer.from(service.keys.refreshToken)).toString('utf8');
       }
     } catch(e) {
-      console.error('Something went wrong');
+      console.error(`  Something went wrong baselining ${SERVICES[service.id].name}`);
     }
     return service;
   });
 }
 
-async function baseline(serviceKeys, privateKey, passphrase) {
+async function baseline(serviceKeys, privateKey, passphrase, spinner) {
   serviceKeys = decryptServiceKeys(serviceKeys, privateKey, passphrase);
 
-  const spinner = ora({
-    text: 'Baselining services, please be patient.',
-    color: 'white'
-  }).start();
+  spinner.text = 'Baselining services, please be patient.';
 
   try {
     const users = await post(`${config.baselineApiUrl}/v1/baseline`, serviceKeys);
-    spinner.succeed('Baselining complete. Opening results in your browser.');
+    spinner.succeed(chalk.bold('Baselining complete. Opening results in your browser.'));
 
     const file = renderEnv.render('report.html', {users});
 
@@ -70,7 +69,7 @@ async function baseline(serviceKeys, privateKey, passphrase) {
     await open(`report/file.html`);
     exit();
   } catch(e) {
-    spinner.fail('Failed baselining your accounts.');
+    spinner.fail(chalk.bold('Failed baselining your accounts.'));
     exit();
   }
 }

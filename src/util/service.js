@@ -128,7 +128,7 @@ async function runServiceCredentialFlow(publicKey, spinner) {
   const serviceNames = await getServiceNamesFromCredentials();
   const shouldCreateNewServiceCredentials = (serviceNames && !await useExistingCredentials(serviceNames)) || !serviceNames;
 
-  console.log('');
+  console.log('\n  Ok, lets get to the real work:');
   if (shouldCreateNewServiceCredentials) {
     const port = await getAvailablePort();
     spinner.text = chalk.bold('Opening browser to get service credentials.');

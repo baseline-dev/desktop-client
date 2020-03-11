@@ -55,7 +55,7 @@ function decryptServiceKeys(serviceKeys, privateKey, passphrase) {
 async function baseline(serviceKeys, privateKey, passphrase, spinner) {
   serviceKeys = decryptServiceKeys(serviceKeys, privateKey, passphrase);
 
-  spinner.text = 'Baselining services, please be patient.';
+  spinner.text = chalk.bold('Baselining services, please be patient.');
 
   try {
     const users = await post(`${config.baselineApiUrl}/v1/baseline`, serviceKeys);

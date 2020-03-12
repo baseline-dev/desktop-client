@@ -61,7 +61,10 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
     const users = await post(`${config.baselineApiUrl}/v1/baseline`, serviceKeys);
     spinner.succeed(chalk.bold('Baselining complete. Opening results in your browser.'));
 
-    const file = renderEnv.render('report.html', {users});
+    const file = renderEnv.render('report.html', {
+      users,
+      baselineStaticAssetsUrl: config.baselineStaticAssetsUrl
+    });
 
     const out = './report/file.html';
     writeFileSync(out, file);

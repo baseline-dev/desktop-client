@@ -5,7 +5,9 @@ var colno = 0;
 var output = "";
 try {
 var parentTemplate = null;
-output += "<div class=\"py-3 fixed bg-white w-full z-10 top-0\" id=\"header\">\n    <nav class=\"relative max-w-screen-xl mx-auto flex items-center justify-between px-4 sm:px-24\">\n        <div class=\"flex items-center flex-1\">\n            <div class=\"flex items-center justify-between w-full md:w-auto\">\n                <a href=\"/\">\n                    <img class=\"h-8 w-auto sm:h-10\" src=\"http://localhost:8080/img/logo/logo.png\" alt=\"\"/>\n                </a>\n            </div>\n            <div class=\"hidden md:block md:ml-10\"></div>\n        </div>\n        <div class=\"hidden md:block text-right\">\n            <span class=\"inline-flex rounded-md shadow-md\"></span>\n        </div>\n    </nav>\n</div>\n<script>\n  const header = document.getElementById('header');\n  function handleHeader() {\n    if (window.pageYOffset > 10) {\n      header.classList.add('border-b', 'border-gray-200');\n    } else {\n      header.classList.remove('border-b', 'border-gray-200');\n    }\n  }\n  window.onscroll = handleHeader;\n  handleHeader();\n</script>";
+output += "<div class=\"py-3 fixed bg-white w-full z-10 top-0\" id=\"header\">\n    <nav class=\"relative max-w-screen-xl mx-auto flex items-center justify-between px-4 sm:px-24\">\n        <div class=\"flex items-center flex-1\">\n            <div class=\"flex items-center justify-between w-full md:w-auto\">\n                <a href=\"/\">\n                    <img class=\"h-8 w-auto sm:h-10\" src=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/logo/logo.png\" alt=\"\"/>\n                </a>\n            </div>\n            <div class=\"hidden md:block md:ml-10\"></div>\n        </div>\n        <div class=\"hidden md:block text-right\">\n            <span class=\"inline-flex rounded-md shadow-md\"></span>\n        </div>\n    </nav>\n</div>\n<script>\n  const header = document.getElementById('header');\n  function handleHeader() {\n    if (window.pageYOffset > 10) {\n      header.classList.add('border-b', 'border-gray-200');\n    } else {\n      header.classList.remove('border-b', 'border-gray-200');\n    }\n  }\n  window.onscroll = handleHeader;\n  handleHeader();\n</script>";
 if(parentTemplate) {
 parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);
 } else {
@@ -28,7 +30,37 @@ var colno = 0;
 var output = "";
 try {
 var parentTemplate = null;
-output += "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, minimum-scale=1, initial-scale=1\">\n    <title>Baseline Report</title>\n    <script src=\"https://kit.fontawesome.com/7d3ec3600d.js\" crossorigin=\"anonymous\"></script>\n    <link rel=\"stylesheet\" href=\"http://localhost:8080/css/style.css\">\n</head>\n\n<body class=\"bg-gray-200 mt-20\">\n";
+output += "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, minimum-scale=1, initial-scale=1\">\n    <link rel=\"shortcut icon\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/favicon/favicon.ico\">\n    <link rel=\"apple-touch-icon\" sizes=\"57x57\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/favicon/apple-icon-57x57.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"60x60\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/favicon/apple-icon-60x60.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"72x72\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/favicon/apple-icon-72x72.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"76x76\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/favicon/apple-icon-76x76.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"114x114\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/favicon/apple-icon-114x114.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"120x120\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/favicon/apple-icon-120x120.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"144x144\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/favicon/apple-icon-144x144.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"152x152\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/favicon/apple-icon-152x152.png\">\n    <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/favicon/apple-icon-180x180.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"192x192\"  href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/favicon/android-icon-192x192.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/favicon/favicon-32x32.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"96x96\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/favicon/favicon-96x96.png\">\n    <link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/img/favicon/favicon-16x16.png\">\n    <meta name=\"msapplication-TileColor\" content=\"#ffffff\">\n    <meta name=\"msapplication-TileImage\" content=\"/ms-icon-144x144.png\">\n    <meta name=\"theme-color\" content=\"#ffffff\">\n    <meta name=\"msapplication-config\" content=\"https://static.Baseline.dev/web/favicon/browserconfig.xml\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\">\n    \n    <title>Baseline Report</title>\n    <script src=\"https://kit.fontawesome.com/7d3ec3600d.js\" crossorigin=\"anonymous\"></script>\n    <link rel=\"stylesheet\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "baselineStaticAssetsUrl"), env.opts.autoescape);
+output += "/css/style.css\">\n</head>\n\n<body class=\"bg-gray-200 mt-20\">\n";
 var tasks = [];
 tasks.push(
 function(callback) {
@@ -48,7 +80,7 @@ output += result;
 callback(null);
 });
 env.waterfall(tasks, function(){
-output += "\n<div class=\"mt-8 mx-auto max-w-screen-xl px-4 sm:mt-12 sm:px-24 md:mt-20 xl:mt-24\">\n    ";
+output += "\n<div class=\"mt-8 mx-auto max-w-screen-xl sm:mt-12 sm:px-24 md:mt-20 xl:mt-24\">\n    ";
 frame = frame.push();
 var t_7 = runtime.contextOrFrameLookup(context, frame, "users");
 if(t_7) {t_7 = runtime.fromIterator(t_7);

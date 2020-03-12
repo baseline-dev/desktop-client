@@ -3,6 +3,7 @@ const config = {
     allowOrigin: 'http://localhost:8080'
   },
   baselineUrl: 'http://localhost:8080/baseline',
+  baselineStaticAssetsUrl: 'http://localhost:8080',
   baselineApiUrl: 'http://localhost:8081'
 };
 

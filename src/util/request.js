@@ -29,13 +29,24 @@ function post(url, body, options) {
       });
 
       res.on('end', () => {
-        if (res.statusCode === 500) reject(body.toString());
+        if (res.statusCode === 500) reject({
+          status: 500,
+          message: body.toString()
+        });
+
+        if (res.statusCode === 401) reject({
+          status: 401,
+          message: body.toString()
+        });
 
         try {
           const response = JSON.parse(body);
           resolve(response);
         } catch(e) {
-          reject(e.message);
+          reject({
+            status: 500,
+            message: e.message
+          });
         }
       })
     });

@@ -11,7 +11,7 @@ import config from './config';
 import nunjucks from './nunjucks/nunjucks';
 import Loader from './nunjucks/loader';
 import template from '../report/template';
-import {exit} from './process';
+import {exit, exitRequestInvite} from './process';
 import {SERVICES} from './service';
 
 const templateLoader = new Loader(template);
@@ -73,6 +73,11 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
     exit();
   } catch(e) {
     spinner.fail(chalk.bold('Failed baselining your accounts.'));
+
+    if (e.status === 401) {
+      return exitRequestInvite();
+    }
+
     exit();
   }
 }

@@ -6,6 +6,16 @@ function exit() {
   process.exit();
 }
 
+function exitRequestInvite() {
+  console.log('\n  👋 Hi friendly human!\n');
+  console.log('     It seems like you don\'t have an invite for Baseline yet.');
+  console.log('     Please head over to https://baseline.dev and request an invite.');
+  console.log('     You can also send an email to:\n');
+  console.log('     support@baseline.dev\n');
+  process.exit();
+}
+
 export {
-  exit
+  exit,
+  exitRequestInvite
 };

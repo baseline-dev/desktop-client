@@ -1,21 +1,17 @@
 import path from 'path';
 import {homedir} from 'os';
-import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'fs';
+import {existsSync, mkdirSync, writeFileSync, readFileSync} from 'fs';
 import {privateDecrypt} from 'crypto';
-import ora from 'ora';
 import open from 'open';
 import chalk from 'chalk';
 
 import {post} from './request';
 import config from './config';
-import nunjucks from './nunjucks/nunjucks';
-import Loader from './nunjucks/loader';
-import template from '../report/template';
+import ejs from 'ejs';
 import {exit, exitRequestInvite} from './process';
-import {SERVICES} from './service';
+import {SERVICES} from '../const/service';
 
-const templateLoader = new Loader(template);
-const renderEnv = new nunjucks.Environment([templateLoader]);
+const REPORT = ejs.compile(readFileSync('./src/template/report.ejs').toString(), {});
 
 function getBaselinePath() {
   return path.join(homedir(), '.baseline');
@@ -61,10 +57,16 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
     const users = await post(`${config.baselineApiUrl}/v1/baseline`, serviceKeys);
     spinner.succeed(chalk.bold('Baselining complete. Opening results in your browser.'));
 
-    const file = renderEnv.render('report.html', {
+
+    const file = await ejs.renderFile('./src/template/report.ejs', {
       users,
       baselineStaticAssetsUrl: config.baselineStaticAssetsUrl
-    });
+    }, {});
+
+    // REPORT({
+    //   users,
+    //   baselineStaticAssetsUrl: config.baselineStaticAssetsUrl
+    // });
 
     const out = './report/file.html';
     writeFileSync(out, file);
@@ -72,6 +74,7 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
     await open(`report/file.html`);
     exit();
   } catch(e) {
+    console.log(e)
     spinner.fail(chalk.bold('Failed baselining your accounts.'));
 
     if (e.status === 401) {

@@ -5,8 +5,8 @@ import {existsSync, writeFileSync, readFileSync} from 'fs';
 import {generateKeyPair as cryptoGenerateKeyPair, createPrivateKey} from 'crypto';
 import chalk from 'chalk';
 
-import {createBaselineSettingsDirIfNotExists, getBaselinePath} from './baseline';
 import {exit} from './process';
+import {createBaselineSettingsDirIfNotExists, getBaselinePath} from './baseline';
 
 async function keysExist() {
   const baselinePath = getBaselinePath();

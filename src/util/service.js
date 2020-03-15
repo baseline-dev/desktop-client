@@ -11,15 +11,7 @@ import {getAvailablePort} from './port';
 import {exit} from './process';
 import {startServer, stopServer} from './server';
 import config from './config';
-
-const SERVICES = {
-  slack: {
-    name: 'Slack'
-  },
-  github: {
-    name: 'GitHub'
-  }
-};
+import {SERVICES} from '../const/service';
 
 function servicesExist() {
   const baselinePath = getBaselinePath();

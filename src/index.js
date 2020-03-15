@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import {runPublicPrivateKeyFlow} from './util/keys';
 import {runServiceCredentialFlow} from './util/service';
 import {baseline} from './util/baseline';

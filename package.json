@@ -11,23 +11,27 @@
     "test:unit": "tape --require esm test/*.js test/**/*.js | tap-spec",
     "lint": "",
     "coverage": "nyc --require esm --reporter=lcov --reporter=text-summary npm run test:unit",
-    "build": "rollup src/index.js --file build/cli.js --format cjs & pkg dist/cli.js --out-path dist"
+    "build": "rollup --config && pkg build/cli.js --out-path dist"
   },
   "author": "Nikolai Onken",
   "license": "Apache 2.0",
   "dependencies": {
     "chalk": "^3.0.0",
+    "ejs": "^3.0.1",
     "esm": "^3.2.25",
     "open": "^7.0.2",
     "ora": "^4.0.3",
     "portfinder": "^1.0.25",
-    "prompts": "^2.3.1"
+    "prompts": "^2.3.1",
+    "save-dev": "0.0.1-security"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-json": "^4.0.2",
     "node-env-file": "^0.1.8",
     "nyc": "^15.0.0",
     "pkg": "^4.4.4",
-    "rollup": "^1.32.0",
+    "rollup": "^2.0.6",
     "tap-spec": "^5.0.0",
     "tape": "^4.13.2"
   }

@@ -10,7 +10,7 @@ jobs:
     - name: Read CHANGELOG
       id: changelog
       run: |
-        echo "::set-output name=body::$(./script/get-changelog-entry.sh CHANGELOG.md)"
+        echo "::set-output name=body::$(sh ./script/get-changelog-entry.sh CHANGELOG.md)"
     name: Create Release
     runs-on: ubuntu-latest
     steps:

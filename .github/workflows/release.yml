@@ -10,7 +10,8 @@ jobs:
     - name: Read CHANGELOG
       id: changelog
       run: |
-        echo "::set-output name=body::$(./script/get-changelog-entry.sh ${{ github.ref }} CHANGELOG.md)"
+        echo "::set-env name=VERSION::${{ github.ref }}"
+        echo "::set-output name=body::$(./script/get-changelog-entry.sh $VERSION CHANGELOG.md)"
     name: Create Release
     runs-on: ubuntu-latest
     steps:

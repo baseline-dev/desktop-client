@@ -7,6 +7,10 @@ on:
 name: Create Release
 jobs:
   build:
+    - name: Read CHANGELOG
+      id: changelog
+      run: |
+        echo "::set-output name=body::$(./script/get-changelog-entry.sh ${{ github.ref }} CHANGELOG.md)"
     name: Create Release
     runs-on: ubuntu-latest
     steps:

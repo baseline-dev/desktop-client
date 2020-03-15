@@ -13,10 +13,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@master
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
       - name: Read CHANGELOG
         id: changelog
         run: |
-          echo "::set-output name=body::$(./script/get-changelog-entry.sh ${{ github.ref }} CHANGELOG.md)"
+          echo "::set-output name=body::$(./script/get-changelog-entry.sh ${{ steps.get_version.outputs.VERSION }} CHANGELOG.md)"
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest

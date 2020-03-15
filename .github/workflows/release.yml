@@ -16,7 +16,7 @@ jobs:
       - name: Read CHANGELOG
         id: changelog
         run: |
-          echo "::set-output name=body::$(cat CHANGELOG.md)"
+          echo "::set-output name=body::$(./script/get-changelog-entry.sh CHANGELOG.md)"
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest

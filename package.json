@@ -12,7 +12,8 @@
     "lint": "",
     "coverage": "nyc --require esm --reporter=lcov --reporter=text-summary npm run test:unit",
     "build": "rollup --config",
-    "build-osx": "npm run build && pkg package.json -o dist/baseline-macos && chmod 0755 dist/baseline-macos"
+    "build-osx": "npm run build && pkg package.json -o dist/baseline-macos && chmod +x dist/baseline-macos && npm run zip-osx",
+    "zip-osx": "zip dist/baseline-osx.zip dist/baseline-osx"
   },
   "author": "Nikolai Onken",
   "license": "Apache 2.0",

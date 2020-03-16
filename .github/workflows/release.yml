@@ -23,7 +23,7 @@ jobs:
       - name: Read CHANGELOG
         id: changelog
         run: |
-          changelog=$(./script/get-changelog-entry.sh ${{ steps.get_version.outputs.VERSION }} CHANGELOG.md)
+          changelog=$(./script/get-changelog-entry.sh ${{ steps.get_version.outputs.VERSION }} CHANGELOG)
           echo $changelog
           changelog="${changelog//'%'/'%25'}"
           changelog="${changelog//$'\n'/'%0A'}"

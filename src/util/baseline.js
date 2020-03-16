@@ -67,7 +67,6 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
     await open(path.join(baselinePath, 'report', 'file.html'));
     exit();
   } catch(e) {
-    console.log(e)
     spinner.fail(chalk.bold('Failed baselining your accounts.'));
 
     if (e.status === 401) {

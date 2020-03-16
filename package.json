@@ -11,7 +11,7 @@
     "test:unit": "tape --require esm test/*.js test/**/*.js | tap-spec",
     "lint": "",
     "coverage": "nyc --require esm --reporter=lcov --reporter=text-summary npm run test:unit",
-    "build": "rollup --config && nexe --input build/cli.js -r './src/template/**/*' -t 'mac-x64-10.15.3' -o dist/baseline"
+    "build": "rollup --config && nexe --input build/cli.js -r './src/template/**/*' -t 'mac-x64-12.15.0' -o dist/baseline"
   },
   "author": "Nikolai Onken",
   "license": "Apache 2.0",

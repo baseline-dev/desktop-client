@@ -1,9 +1,9 @@
 import ora from 'ora';
 import path from 'path';
 import prompts from 'prompts';
+import chalk from 'chalk';
 import {existsSync, writeFileSync, readFileSync} from 'fs';
 import {generateKeyPair as cryptoGenerateKeyPair, createPrivateKey} from 'crypto';
-import chalk from 'chalk';
 
 import {exit} from './process';
 import {createBaselineSettingsDirIfNotExists, getBaselinePath} from './baseline';

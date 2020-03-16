@@ -1,4 +1,4 @@
-## v0.0.15
+## v0.0.16
 
 ### Release management
 

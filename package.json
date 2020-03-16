@@ -12,7 +12,7 @@
     "lint": "",
     "coverage": "nyc --require esm --reporter=lcov --reporter=text-summary npm run test:unit",
     "build": "rollup --config",
-    "build-osx": "npm run build && nexe --input build/cli.js -r './src/template/**/*' -t 'mac-x64-12.15.0' -o dist/baseline && chmod 0755 dist/baseline-osx"
+    "build-osx": "npm run build && nexe --input build/cli.js -r './src/template/**/*' -t 'mac-x64-12.15.0' -o dist/baseline-osx && chmod 0755 dist/baseline-osx"
   },
   "author": "Nikolai Onken",
   "license": "Apache 2.0",

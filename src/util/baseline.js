@@ -62,9 +62,9 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
 
     const baselinePath = getBaselinePath();
     mkdirSync(path.join(baselinePath, 'report'), {recursive: true});
-    writeFileSync(path.join(baselinePath, 'report', 'file.html'), file);
+    writeFileSync(path.join(baselinePath, 'report', 'baseline.html'), file);
 
-    await open(path.join(baselinePath, 'report', 'file.html'));
+    await open(path.join(baselinePath, 'report', 'baseline.html'));
     exit();
   } catch(e) {
     spinner.fail(chalk.bold('Failed baselining your accounts.'));

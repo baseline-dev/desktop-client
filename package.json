@@ -11,14 +11,14 @@
     "test:unit": "tape --require esm test/*.js test/**/*.js | tap-spec",
     "lint": "",
     "coverage": "nyc --require esm --reporter=lcov --reporter=text-summary npm run test:unit",
-    "build": "rollup --config && pkg package.json --out-path dist"
+    "build": "rollup --config && nexe --input build/cli.js -r './src/template/**/*' -r './src/report/**/*' --output dist/baseline"
   },
   "author": "Nikolai Onken",
   "license": "Apache 2.0",
   "pkg": {
     "assets": [
-      "src/template/*",
-      "node_modules/open/*"
+      "src/template/**/*",
+      "node_modules/open/**/*"
     ]
   },
   "dependencies": {
@@ -34,9 +34,9 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-json": "^4.0.2",
+    "nexe": "^4.0.0-beta.4",
     "node-env-file": "^0.1.8",
     "nyc": "^15.0.0",
-    "pkg": "^4.4.4",
     "rollup": "^2.0.6",
     "tap-spec": "^5.0.0",
     "tape": "^4.13.2"

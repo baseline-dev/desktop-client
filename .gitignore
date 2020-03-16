@@ -1,9 +1,8 @@
-/node_modules/
-/dist/
-/coverage/
 .DS_Store
 /.nyc_output
 /.idea
-/report/file.html
 /.env
+/node_modules/
+/dist/
 /build
+/coverage/

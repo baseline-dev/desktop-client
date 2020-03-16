@@ -4,15 +4,12 @@ import {existsSync, mkdirSync, writeFileSync, readFileSync} from 'fs';
 import {privateDecrypt} from 'crypto';
 import open from 'open';
 import chalk from 'chalk';
-
 import {post} from './request';
 import config from './config';
 import ejs from 'ejs';
 import {exit, exitRequestInvite} from './process';
 import {SERVICES} from '../const/service';
-
-const REPORT = ejs.compile(readFileSync('./src/template/report.ejs').toString(), {});
-
+console.log(path.join(__dirname, 'report', 'file.html'))
 function getBaselinePath() {
   return path.join(homedir(), '.baseline');
 }
@@ -63,15 +60,11 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
       baselineStaticAssetsUrl: config.baselineStaticAssetsUrl
     }, {});
 
-    // REPORT({
-    //   users,
-    //   baselineStaticAssetsUrl: config.baselineStaticAssetsUrl
-    // });
+    const baselinePath = getBaselinePath();
+    mkdirSync(path.join(baselinePath, 'report'), {recursive: true});
+    writeFileSync(path.join(baselinePath, 'report', 'file.html'), file);
 
-    const out = './report/file.html';
-    writeFileSync(out, file);
-
-    await open(`report/file.html`);
+    await open(path.join(baselinePath, 'report', 'file.html'));
     exit();
   } catch(e) {
     console.log(e)

@@ -6,10 +6,25 @@ import open from 'open';
 import chalk from 'chalk';
 import {post} from './request';
 import config from './config';
-import ejs from 'ejs';
 import {exit, exitRequestInvite} from './process';
 import {SERVICES} from '../const/service';
-console.log(path.join(__dirname, 'report', 'file.html'))
+
+import REPORT from '../template/report';
+import HEADER from '../template/header';
+import SERVICE_CONTAINER from '../template/service-container';
+import DETAILS_GITHUB from '../template/service-details-github';
+import DETAILS_SLACK from '../template/service-details-slack';
+import USER_ITEM from '../template/user-item';
+
+const TEMPLATES = {
+  REPORT,
+  HEADER,
+  SERVICE_CONTAINER,
+  DETAILS_GITHUB,
+  DETAILS_SLACK,
+  USER_ITEM
+};
+
 function getBaselinePath() {
   return path.join(homedir(), '.baseline');
 }
@@ -54,11 +69,11 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
     const users = await post(`${config.baselineApiUrl}/v1/baseline`, serviceKeys);
     spinner.succeed(chalk.bold('Baselining complete. Opening results in your browser.'));
 
-
-    const file = await ejs.renderFile('./src/template/report.ejs', {
+    const file = await REPORT({
       users,
-      baselineStaticAssetsUrl: config.baselineStaticAssetsUrl
-    }, {});
+      baselineStaticAssetsUrl: config.baselineStaticAssetsUrl,
+      templates: TEMPLATES
+    });
 
     const baselinePath = getBaselinePath();
     mkdirSync(path.join(baselinePath, 'report'), {recursive: true});
@@ -67,6 +82,7 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
     await open(path.join(baselinePath, 'report', 'baseline.html'));
     exit();
   } catch(e) {
+    console.log(e)
     spinner.fail(chalk.bold('Failed baselining your accounts.'));
 
     if (e.status === 401) {

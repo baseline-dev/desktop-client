@@ -1,7 +1,7 @@
+import ora from 'ora';
 import {runPublicPrivateKeyFlow} from './util/keys';
 import {runServiceCredentialFlow} from './util/service';
 import {baseline} from './util/baseline';
-import ora from 'ora';
 
 async function main() {
   console.log(`\n  👋 Hi friend! Let's get started.`);

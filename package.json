@@ -1,6 +1,6 @@
 {
   "name": "baseline-cli",
-  "version": "0.0.22",
+  "version": "0.0.20",
   "description": "Baseline your SaaS accounts.",
   "main": "src/index.js",
   "bin": {
@@ -12,30 +12,31 @@
     "lint": "",
     "coverage": "nyc --require esm --reporter=lcov --reporter=text-summary npm run test:unit",
     "build": "rollup --config",
-    "build-osx": "npm run build && nexe --input build/cli.js -r './src/template/**/*' -t 'mac-x64-12.15.0' -o dist/baseline-osx && chmod 0755 dist/baseline-osx"
+    "build-osx": "npm run build && pkg package.json -o dist/baseline-macos && chmod 0755 dist/baseline-macos"
   },
   "author": "Nikolai Onken",
   "license": "Apache 2.0",
   "pkg": {
+    "targets": [
+      "latest-macos"
+    ],
     "assets": [
-      "src/template/**/*",
+      "build/template/**/*",
       "node_modules/open/**/*"
     ]
   },
   "dependencies": {
     "chalk": "^3.0.0",
-    "ejs": "^3.0.1",
-    "esm": "^3.2.25",
+    "lodash.template": "^4.5.0",
     "open": "^7.0.2",
     "ora": "^4.0.3",
+    "pkg": "^4.4.4",
     "portfinder": "^1.0.25",
-    "prompts": "^2.3.1",
-    "save-dev": "0.0.1-security"
+    "prompts": "^2.3.1"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-json": "^4.0.2",
-    "nexe": "^4.0.0-beta.4",
     "node-env-file": "^0.1.8",
     "nyc": "^15.0.0",
     "rollup": "^2.0.6",

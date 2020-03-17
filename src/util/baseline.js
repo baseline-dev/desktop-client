@@ -65,12 +65,16 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
 
   spinner.text = chalk.bold('Baselining services, please be patient.');
 
-  try {
-    const users = await post(`${config.baselineApiUrl}/v1/baseline`, serviceKeys);
+  const response = await post(`/v1/baseline`, serviceKeys);
+
+  if (response.status === 401) {
+    spinner.fail(chalk.bold('Failed baselining your accounts.'));
+    return exitRequestInvite();
+  } else if (response.status === 200) {
     spinner.succeed(chalk.bold('Baselining complete. Opening results in your browser.'));
 
     const file = await REPORT({
-      users,
+      users: response.body.result,
       baselineStaticAssetsUrl: config.baselineStaticAssetsUrl,
       templates: TEMPLATES
     });
@@ -80,17 +84,12 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
     writeFileSync(path.join(baselinePath, 'report', 'baseline.html'), file);
 
     await open(path.join(baselinePath, 'report', 'baseline.html'));
-    exit();
-  } catch(e) {
-    console.log(e)
+  } else {
+    console.log(response)
     spinner.fail(chalk.bold('Failed baselining your accounts.'));
-
-    if (e.status === 401) {
-      return exitRequestInvite();
-    }
-
-    exit();
   }
+
+  exit();
 }
 
 export {

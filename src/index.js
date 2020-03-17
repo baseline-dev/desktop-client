@@ -4,6 +4,7 @@ import {runPublicPrivateKeyFlow} from './util/keys';
 import {runServiceCredentialFlow} from './util/service';
 import {baseline} from './util/baseline';
 import {clean} from './util/clean';
+import {runCredentialFlow} from './util/credentials';
 
 program
   .action(main);
@@ -17,7 +18,8 @@ program.command('baseline')
 program.parse(process.argv);
 
 async function main() {
-  console.log(`\n  👋 Hi friend! Let's get started.`);
+  console.log(`\n  Welcome to Baseline 🎉`);
+  await runCredentialFlow();
   const {passphrase, privateKey, publicKey} = await runPublicPrivateKeyFlow();
 
   const spinner = new ora({});

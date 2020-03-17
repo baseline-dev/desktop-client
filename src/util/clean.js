@@ -6,7 +6,7 @@ async function clean() {
   console.log(`\n  Cleaning everything in ${path}`);
   rmdirSync(path, { recursive: true });
   mkdirSync(path, { recursive: true });
-  console.log(`  👋 Done.`);
+  console.log(`  Done. You have a clean setup now 👋\n`);
 }
 
 export {clean}

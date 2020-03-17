@@ -1,58 +1,66 @@
 import https from 'https';
 import http from 'http';
-import path from 'path';
-import {readFileSync} from 'fs';
-import {homedir} from 'os';
 import Url from 'url';
+import merge from 'lodash.merge';
 
-const jwtFile = path.join(homedir(), '.baseline', 'baseline');
+import config from './config';
+import {getCredentials} from './credentials';
 
-function post(url, body, options) {
+function post(url, body, options = {}) {
   return new Promise((resolve, reject) => {
-    const postUrl = Url.parse(url);
-    const jwt = readFileSync(jwtFile).toString().trim();
+    const postUrl = Url.parse(`${config.baselineApiUrl}${url}`);
 
     body = JSON.stringify(body);
 
-    const options = {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Content-Length': body.length
+    };
+
+    const credentials = getCredentials();
+    if (credentials) {
+      headers.Authorization = `Bearer ${credentials}`;
+    }
+
+    const requestOptions = {
       hostname: postUrl.hostname,
       port: postUrl.port || 443,
       path: postUrl.path,
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': body.length,
-        'Authorization': `Bearer ${jwt}`
-      }
+      headers: merge(headers, options.headers)
     };
 
     const request = postUrl.protocol === 'http:' ? http : https;
 
-    const req = request.request(options, (res) => {
+    const req = request.request(requestOptions, (res) => {
       const body = [];
       res.on('data', (d) => {
         body.push(d);
       });
 
       res.on('end', () => {
-        if (res.statusCode === 500) reject({
-          status: 500,
-          message: body.toString()
-        });
-
-        if (res.statusCode === 401) reject({
-          status: 401,
-          message: body.toString()
-        });
-
-        try {
-          const response = JSON.parse(body);
-          resolve(response);
-        } catch(e) {
-          reject({
+        if (res.statusCode === 500) {
+          resolve({
             status: 500,
-            message: e.message
+            body: body.toString()
           });
+        } else if (res.statusCode === 401) {
+          resolve({
+            status: 401,
+            body: body.toString()
+          });
+        } else {
+          try {
+            resolve({
+              status: res.statusCode,
+              body: JSON.parse(body)
+            });
+          } catch(e) {
+            resolve({
+              status: 500,
+              body: e.message
+            });
+          }
         }
       })
     });

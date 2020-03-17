@@ -15,7 +15,7 @@ import {SERVICES} from '../const/service';
 
 function servicesExist() {
   const baselinePath = getBaselinePath();
-  return existsSync(path.join(baselinePath, 'credentials'));
+  return existsSync(path.join(baselinePath, 'service-credentials'));
 }
 
 async function getServiceNamesFromCredentials() {
@@ -24,7 +24,7 @@ async function getServiceNamesFromCredentials() {
   const baselinePath = getBaselinePath();
 
   let serviceNames;
-  let credentials = await readFileSync(path.join(baselinePath, 'credentials')).toString('utf8');
+  let credentials = await readFileSync(path.join(baselinePath, 'service-credentials')).toString('utf8');
   try {
     credentials = parseCredentials(credentials);
     serviceNames = credentials.map((service) => {
@@ -41,7 +41,7 @@ async function getServiceCredentials() {
   if (!servicesExist()) return;
 
   const baselinePath = getBaselinePath();
-  let credentials = await readFileSync(path.join(baselinePath, 'credentials')).toString('utf8');
+  let credentials = await readFileSync(path.join(baselinePath, 'service-credentials')).toString('utf8');
   try {
     credentials = parseCredentials(credentials);
   } catch(e) {
@@ -105,7 +105,7 @@ async function generateUrl(publicKey, port) {
 }
 
 async function handleKeys(keys) {
-  const file = path.join(homedir(), '.baseline', 'credentials');
+  const file = path.join(homedir(), '.baseline', 'service-credentials');
 
   if (!existsSync(file)) {
     await mkdirSync(path.join(homedir(), '.baseline'), {recursive: true});

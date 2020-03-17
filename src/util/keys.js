@@ -126,6 +126,8 @@ async function runPublicPrivateKeyFlow() {
         return isValid || 'Please enter the correct passphrase.'
       }
     }));
+
+    if (!passphrase) exit();
   }
 
   return {passphrase, privateKey, publicKey};

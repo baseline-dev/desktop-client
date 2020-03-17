@@ -1,6 +1,6 @@
 import path from 'path';
 import {homedir} from 'os';
-import {existsSync, mkdirSync, writeFileSync, readFileSync} from 'fs';
+import {existsSync, mkdirSync, writeFileSync} from 'fs';
 import {privateDecrypt} from 'crypto';
 import open from 'open';
 import chalk from 'chalk';
@@ -8,6 +8,7 @@ import {post} from './request';
 import config from './config';
 import {exit, exitRequestInvite} from './process';
 import {SERVICES} from '../const/service';
+import {getEventBus} from './event-bus';
 
 import REPORT from '../template/report';
 import HEADER from '../template/header';
@@ -24,6 +25,8 @@ const TEMPLATES = {
   DETAILS_SLACK,
   USER_ITEM
 };
+
+const eventBus = getEventBus();
 
 function getBaselinePath() {
   return path.join(homedir(), '.baseline');
@@ -68,6 +71,7 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
   const response = await post(`/v1/baseline`, serviceKeys);
 
   if (response.status === 401) {
+    eventBus.emit('baseline-fail');
     spinner.fail(chalk.bold('Failed baselining your accounts.'));
     return exitRequestInvite();
   } else if (response.status === 200) {
@@ -80,12 +84,18 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
     });
 
     const baselinePath = getBaselinePath();
-    mkdirSync(path.join(baselinePath, 'report'), {recursive: true});
-    writeFileSync(path.join(baselinePath, 'report', 'baseline.html'), file);
+    const report = path.join(baselinePath, 'report', 'baseline.html');
 
-    await open(path.join(baselinePath, 'report', 'baseline.html'));
+    mkdirSync(path.join(baselinePath, 'report'), {recursive: true});
+    writeFileSync(report, file);
+
+    eventBus.emit('baseline-success', {
+      reportLocation: report
+    });
+
+    await open(report);
   } else {
-    console.log(response)
+    eventBus.emit('baseline-fail');
     spinner.fail(chalk.bold('Failed baselining your accounts.'));
   }
 

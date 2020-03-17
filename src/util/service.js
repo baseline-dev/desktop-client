@@ -11,7 +11,10 @@ import {getAvailablePort} from './port';
 import {exit} from './process';
 import {startServer, stopServer} from './server';
 import config from './config';
+import {getEventBus} from './event-bus';
 import {SERVICES} from '../const/service';
+
+const eventBus = getEventBus();
 
 function servicesExist() {
   const baselinePath = getBaselinePath();
@@ -79,17 +82,16 @@ function waitForCredentials(port) {
     ((async function() {
       const server = await startServer(port);
 
-      server.on('keys', async (keys) => {
-        await handleKeys(keys);
+      eventBus.on('received-service-credentials', async (credentials) => {
+        await writeServiceCredentialsToDisk(credentials);
         await stopServer(server);
 
         try {
-          keys = parseCredentials(keys);
-          resolve(keys);
+          credentials = parseCredentials(credentials);
+          resolve(credentials);
         } catch(e) {
           reject(e);
         }
-
       });
     })());
   });
@@ -104,7 +106,7 @@ async function generateUrl(publicKey, port) {
   await open(`${config.baselineUrl}?${querystring.stringify(query)}`);
 }
 
-async function handleKeys(keys) {
+async function writeServiceCredentialsToDisk(keys) {
   const file = path.join(homedir(), '.baseline', 'service-credentials');
 
   if (!existsSync(file)) {

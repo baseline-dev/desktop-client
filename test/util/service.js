@@ -1,6 +1,6 @@
 import test from 'tape';
 
-import {parseCredentials, runServiceCredentialFlow} from '../../src/util/service';
+import {parseCredentials, runServiceCredentialFlow} from '../../src/util/service-credentials';
 import env from '../_env';
 
 env();

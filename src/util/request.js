@@ -4,7 +4,7 @@ import Url from 'url';
 import merge from 'lodash.merge';
 
 import config from './config';
-import {getCredentials} from './credentials';
+import {getCredentials} from './baseline-settings';
 
 function post(url, body, options = {}) {
   return new Promise((resolve, reject) => {

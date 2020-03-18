@@ -1,10 +1,10 @@
 import ora from 'ora';
 import {program} from 'commander';
 import {runPublicPrivateKeyFlow} from './util/keys';
-import {runServiceCredentialFlow} from './util/service';
+import {runServiceCredentialFlow} from './util/service-credentials';
 import {baseline} from './util/baseline';
 import {clean} from './util/clean';
-import {runCredentialFlow} from './util/credentials';
+import {runCredentialFlow} from './util/baseline-settings';
 
 program
   .action(main);

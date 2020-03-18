@@ -97,7 +97,7 @@ function waitForCredentials(port) {
   });
 }
 
-async function generateUrl(publicKey, port) {
+async function openBrowser(publicKey, port) {
   const query = {
     port: port,
     publicKey
@@ -117,7 +117,6 @@ async function writeServiceCredentialsToDisk(keys) {
 }
 
 async function runServiceCredentialFlow(publicKey, spinner) {
-  // Now we check if there are already services we want to baseline.
   let credentials;
   const serviceNames = await getServiceNamesFromCredentials();
   const shouldCreateNewServiceCredentials = (serviceNames && !await useExistingCredentials(serviceNames)) || !serviceNames;
@@ -128,7 +127,7 @@ async function runServiceCredentialFlow(publicKey, spinner) {
     spinner.text = chalk.bold('Opening browser to get service credentials.');
     spinner.start();
 
-    await generateUrl(publicKey, port);
+    await openBrowser(publicKey, port);
 
     credentials = await waitForCredentials(port);
   } else {
@@ -143,6 +142,5 @@ async function runServiceCredentialFlow(publicKey, spinner) {
 
 export {
   runServiceCredentialFlow,
-  parseCredentials,
-  SERVICES
+  parseCredentials
 };

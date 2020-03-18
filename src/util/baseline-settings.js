@@ -41,9 +41,13 @@ async function runCredentialFlow() {
       type: 'text',
       name: 'credentials',
       message: 'Please enter the credentials we provided to you.',
-      validate: async (value) => {
+      validate: async function(value) {
         const isValid = await isValidCredential(value);
-        return isValid || `The credentials don't appear to be valid. Please double check or reach out to support@baseline.dev 🙏`;
+
+        if (isValid) return true;
+
+        this.reset();
+        return `The credentials don't appear to be valid. Please double check or reach out to support@baseline.dev 🙏`;
       }
     }));
 

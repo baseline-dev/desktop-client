@@ -108,7 +108,14 @@ async function runPublicPrivateKeyFlow() {
       type: 'password',
       name: 'passphrase',
       message: 'Please enter a passphrase to encrypt the service access keys.',
-      validate: value => value.length < 4 ? `Please enter at least 4 characters` : true
+      validate: function(value) {
+        const isValid = value.length > 3;
+
+        if (isValid) return true;
+
+        this.reset();
+        return  `Please enter at least 4 characters`;
+      }
     }));
 
     ({privateKey, publicKey} = await generateKeyPair(passphrase));
@@ -121,9 +128,13 @@ async function runPublicPrivateKeyFlow() {
       type: 'password',
       name: 'passphrase',
       message: 'Please enter the passphrase to decrypt the service access keys.',
-      validate: (value) => {
+      validate: function(value) {
         const isValid = isValidPassphrase(privateKey, value);
-        return isValid || 'Please enter the correct passphrase.'
+
+        if (isValid) return true;
+
+        this.reset();
+        return 'Please enter the correct passphrase.'
       }
     }));
 

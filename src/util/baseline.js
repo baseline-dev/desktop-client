@@ -87,7 +87,7 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
     const report = path.join(baselinePath, 'report', 'baseline.html');
 
     mkdirSync(path.join(baselinePath, 'report'), {recursive: true});
-    writeFileSync(report, file);
+    // writeFileSync(report, file);
 
     eventBus.emit('baseline-success', {
       reportLocation: report

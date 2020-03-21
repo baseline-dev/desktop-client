@@ -12,7 +12,7 @@
     "lint": "",
     "coverage": "nyc --require esm --reporter=lcov --reporter=text-summary npm run test:unit",
     "build": "rollup --config",
-    "build-osx": "npm run build && pkg package.json -o dist/baseline-macos && chmod +x dist/baseline-macos && npm run zip-osx",
+    "build-osx": "NODE_ENV=production npm run build && pkg package.json -o dist/baseline-macos && chmod +x dist/baseline-macos && npm run zip-osx",
     "zip-osx": "zip -j dist/baseline-macos.zip dist/baseline-macos"
   },
   "author": "Nikolai Onken",

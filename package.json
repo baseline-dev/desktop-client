@@ -1,6 +1,6 @@
 {
   "name": "baseline-cli",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "description": "Baseline your SaaS accounts.",
   "main": "src/index.js",
   "bin": {

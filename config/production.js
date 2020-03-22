@@ -3,7 +3,7 @@ const config = {
     allowOrigin: 'https://baseline.dev'
   },
   baselineUrl: 'https://baseline.dev/baseline',
-  baselineStaticAssetsUrl: 'https://baseline.dev',
+  baselineStaticAssetsUrl: 'https://static.baseline.dev/latest',
   baselineApiUrl: 'https://api.baseline.dev'
 };
 

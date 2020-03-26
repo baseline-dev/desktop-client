@@ -17,10 +17,17 @@ class Server {
     this.routes = {
       post: {}
     };
+
+    // Binding to scope as the build tool doesn't support
+    // arrow functions.
+    this.handlePost = this.handlePost.bind(this);
+    this.noHandler = this.noHandler.bind(this);
+    this.requestListener = this.requestListener.bind(this);
+
     this.server = http.createServer(this.requestListener);
   }
 
-  requestListener = async (nodeReq, nodeRes) => {
+  async requestListener(nodeReq, nodeRes) {
     const method = nodeReq.method.toLowerCase();
     const req = {
       url: url.parse(nodeReq.url),
@@ -53,11 +60,11 @@ class Server {
     nodeRes.end(body);
   };
 
-  noHandler = async (nodeReq, ctx, res) => {
+  async noHandler(nodeReq, ctx, res) {
     res.status = 404;
-  };
+  }
 
-  handlePost = async (nodeReq, req, res) => {
+  async handlePost(nodeReq, req, res) {
     return new Promise((resolve, reject) => {
       const {pathname} = req.url;
       const chunks = [];
@@ -81,18 +88,18 @@ class Server {
           .catch(reject);
       });
     });
-  };
+  }
 
-  post = (route, handler) => {
+  post(route, handler) {
     this.routes.post[route] = handler;
-  };
+  }
 
-  listen = (port) => {
+  listen(port) {
     this.port = port;
     this.server.listen(port);
-  };
+  }
 
-  stop = () => {
+  stop() {
     this.server.close();
   }
 }

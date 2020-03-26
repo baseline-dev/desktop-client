@@ -6,7 +6,7 @@ import open from 'open';
 import chalk from 'chalk';
 import {post} from './request';
 import config from './config';
-import {exit, exitRequestInvite} from './process';
+import {exitRequestInvite} from './process';
 import {SERVICES} from '../const/service';
 import {getEventBus} from './event-bus';
 
@@ -43,21 +43,16 @@ async function createBaselineSettingsDirIfNotExists() {
 function decryptServiceKeys(serviceKeys, privateKey, passphrase) {
   return serviceKeys.map((service) => {
     try {
-      if (service.keys.accessToken) {
-        service.keys.accessToken = privateDecrypt({
-          key: privateKey,
-          passphrase: passphrase
-        }, Buffer.from(service.keys.accessToken)).toString('utf8');
-      }
-
-      if (service.keys.refreshToken) {
-        service.keys.refreshToken = privateDecrypt({
-          key: privateKey,
-          passphrase: passphrase
-        }, Buffer.from(service.keys.refreshToken)).toString('utf8');
-      }
+      Object.keys(service.credentials).forEach((key) => {
+        if (service.credentials[key]) {
+          service.credentials[key] = privateDecrypt({
+            key: privateKey,
+            passphrase: passphrase
+          }, Buffer.from(service.credentials[key], 'base64')).toString('utf8');
+        }
+      });
     } catch(e) {
-      console.error(`  Something went wrong baselining ${SERVICES[service.id].name}`);
+      console.error(`  Something went wrong baselining ${SERVICES[service.serviceId].name}`);
     }
     return service;
   });
@@ -95,11 +90,9 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
 
     await open(report);
   } else {
-    eventBus.emit('baseline-fail');
+    eventBus.emit('baseline-error');
     spinner.fail(chalk.bold('Failed baselining your accounts.'));
   }
-
-  exit();
 }
 
 export {

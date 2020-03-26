@@ -7,9 +7,7 @@ import {homedir} from 'os';
 import chalk from 'chalk';
 
 import {getBaselinePath} from './baseline';
-import {getAvailablePort} from './port';
 import {exit} from './process';
-import {startServer, stopServer} from './server';
 import config from './config';
 import {getEventBus} from './event-bus';
 import {SERVICES} from '../const/service';
@@ -27,17 +25,28 @@ async function getServiceNamesFromCredentials() {
   const baselinePath = getBaselinePath();
 
   let serviceNames;
-  let credentials = await readFileSync(path.join(baselinePath, 'service-credentials')).toString('utf8');
+  let credentials = await readFileSync(path.join(baselinePath, 'service-credentials')).toString();
+
   try {
-    credentials = parseCredentials(credentials);
+    credentials = JSON.parse(Buffer.from(credentials, 'base64').toString('ascii'));
     serviceNames = credentials.map((service) => {
-      return SERVICES[service.id].name;
+      return SERVICES[service.serviceId].name;
     });
   } catch(e) {
-    console.log('Error parding credentials');
+    console.log('  Error parsing credentials');
   }
 
   return serviceNames;
+}
+
+async function writeServiceCredentialsToDisk(keys) {
+  const file = path.join(homedir(), '.baseline', 'service-credentials');
+
+  if (!existsSync(file)) {
+    await mkdirSync(path.join(homedir(), '.baseline'), {recursive: true});
+  }
+
+  await writeFileSync(file, Buffer.from(JSON.stringify(keys)).toString('base64'));
 }
 
 async function getServiceCredentials() {
@@ -48,7 +57,7 @@ async function getServiceCredentials() {
   try {
     credentials = parseCredentials(credentials);
   } catch(e) {
-    console.log('Error parsing credentials');
+    console.log('  Error parsing credentials');
   }
 
   return credentials;
@@ -80,14 +89,8 @@ function parseCredentials(credentials) {
 function waitForCredentials(port) {
   return new Promise((resolve, reject) => {
     ((async function() {
-      const server = await startServer(port);
-
       eventBus.on('received-service-credentials', async (credentials) => {
-        await writeServiceCredentialsToDisk(credentials);
-        await stopServer(server);
-
         try {
-          credentials = parseCredentials(credentials);
           resolve(credentials);
         } catch(e) {
           reject(e);
@@ -106,30 +109,19 @@ async function openBrowser(publicKey, port) {
   await open(`${config.baselineUrl}?${querystring.stringify(query)}`);
 }
 
-async function writeServiceCredentialsToDisk(keys) {
-  const file = path.join(homedir(), '.baseline', 'service-credentials');
-
-  if (!existsSync(file)) {
-    await mkdirSync(path.join(homedir(), '.baseline'), {recursive: true});
-  }
-
-  await writeFileSync(file, keys);
-}
-
-async function runServiceCredentialFlow(publicKey, spinner) {
+async function runServiceCredentialFlow(publicKey, port, spinner) {
   let credentials;
   const serviceNames = await getServiceNamesFromCredentials();
   const shouldCreateNewServiceCredentials = (serviceNames && !await useExistingCredentials(serviceNames)) || !serviceNames;
 
   console.log('\n  Ok, lets get to the real work:');
   if (shouldCreateNewServiceCredentials) {
-    const port = await getAvailablePort();
     spinner.text = chalk.bold('Opening browser to get service credentials.');
     spinner.start();
 
     await openBrowser(publicKey, port);
 
-    credentials = await waitForCredentials(port);
+    credentials = await waitForCredentials();
   } else {
     spinner.text = chalk.bold('Loading service credentials.');
     spinner.start();
@@ -142,5 +134,5 @@ async function runServiceCredentialFlow(publicKey, spinner) {
 
 export {
   runServiceCredentialFlow,
-  parseCredentials
+  writeServiceCredentialsToDisk
 };

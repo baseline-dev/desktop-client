@@ -1,66 +1,54 @@
-import http from 'http';
-import config from './config';
+import {getAvailablePort} from './port';
+import {Server} from './http';
+import {post} from './request';
+import {writeServiceCredentialsToDisk} from './service-credentials';
 import {getEventBus} from './event-bus';
 
+const app = new Server();
 const eventBus = getEventBus();
 
-const DEFAULT_HEADERS = {
-  'Access-Control-Allow-Origin': config.service.allowOrigin,
-  'Access-Control-Allow-Headers': 'content-type',
-  'Content-Type': 'application/json'
-};
+app.post('/baseline', (ctx, res) => {
+  return new Promise((resolve, reject) => {
+    writeServiceCredentialsToDisk(ctx.body)
+      .then(() => {
+        eventBus.emit('received-service-credentials', ctx.body);
+      })
+      .catch(reject);
 
-async function startServer(port) {
-  const requestListener = function (req, res) {
     eventBus.on('baseline-fail', () => {
-      res.writeHead(500, DEFAULT_HEADERS);
-      res.end(JSON.stringify({
+      res.status = 500;
+      res.body = {
         status: 'error',
         message: 'Baselining failed.'
-      }));
+      };
+      resolve();
     });
 
     eventBus.on('baseline-success', (args) => {
-      res.writeHead(200, DEFAULT_HEADERS);
-      res.end(JSON.stringify({
+      res.status = 200;
+      res.body = {
         status: 'ok',
         message: 'Baselining succeeded.',
         result: {
           reportLocation: args.reportLocation
         }
-      }));
+      };
+      resolve();
     });
+  });
 
-    if (req.method === 'OPTIONS') {
-      res.writeHead(200, DEFAULT_HEADERS);
-      res.end();
-    } else if (req.method === 'POST') {
-      const chunks = [];
-      req.on('data', chunk => chunks.push(chunk));
-      req.on('end', async () => {
-        const data = Buffer.concat(chunks);
-        eventBus.emit('received-service-credentials', JSON.parse(data.toString()).credentials);
-      });
-    } else {
-      res.writeHead(200, DEFAULT_HEADERS);
-      res.end(JSON.stringify({
-        status: 'ok',
-        message: 'Hi!'
-      }));
-    }
+});
 
-  };
+app.post('/baseline/dryrun', async (ctx, res) => {
+  const {status, body} = await post(`/v1/baseline/dryrun`, ctx.body);
+  res.status = status;
+  res.body = body;
+});
 
-  const server = http.createServer(requestListener);
-  server.listen(port);
-  return server;
+async function initServer() {
+  const port = await getAvailablePort();
+  app.listen(port);
+  return app;
 }
 
-function stopServer(server) {
-  server.close();
-}
-
-export {
-  startServer,
-  stopServer
-};
+export {initServer}

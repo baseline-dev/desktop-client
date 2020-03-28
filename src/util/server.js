@@ -1,8 +1,9 @@
 import {getAvailablePort} from './port';
 import {Server} from './http';
 import {post} from './request';
-import {writeServiceCredentialsToDisk} from './service-credentials';
+import {addCredentials, getServiceCredentials, writeServiceCredentialsToDisk} from './service-credentials';
 import {getEventBus} from './event-bus';
+import {encryptValue, getKeys} from './keys';
 
 const app = new Server();
 const eventBus = getEventBus();
@@ -39,10 +40,40 @@ app.post('/baseline', (ctx, res) => {
 
 });
 
-app.post('/baseline/dryrun', async (ctx, res) => {
+app.post('/baseline/credentials/encrypt', async (ctx, res) => {
   const {status, body} = await post(`/v1/baseline/dryrun`, ctx.body);
+
+  if (body.status === 'error') {
+    res.status = status;
+    res.body = {
+      status: 'error',
+      message: body.message
+    };
+    return;
+  }
+
+  const {publicKey} = await getKeys();
+  const encryptedCredentials = ctx.body.map((service) => {
+    Object.keys(service.credentials).forEach(async (key) => {
+      service.credentials[key] = encryptValue(publicKey, service.credentials[key]);
+    });
+    return service;
+  });
+
   res.status = status;
-  res.body = body;
+  res.body = {
+    status: 'ok',
+    result: encryptedCredentials
+  };
+});
+
+app.get('/baseline/credentials', async (ctx, res) => {
+  const credentials = await getServiceCredentials();
+  res.status = 200;
+  res.body = {
+    status: 'ok',
+    result: credentials || []
+  };
 });
 
 async function initServer() {

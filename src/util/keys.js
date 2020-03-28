@@ -3,7 +3,7 @@ import path from 'path';
 import prompts from 'prompts';
 import chalk from 'chalk';
 import {existsSync, writeFileSync, readFileSync} from 'fs';
-import {generateKeyPair as cryptoGenerateKeyPair, createPrivateKey} from 'crypto';
+import {generateKeyPair as cryptoGenerateKeyPair, createPrivateKey, publicEncrypt} from 'crypto';
 
 import {exit} from './process';
 import {createBaselineSettingsDirIfNotExists, getBaselinePath} from './baseline';
@@ -45,6 +45,11 @@ async function getKeys() {
   const privateKey = await readFileSync(path.join(baselinePath, 'id_rsa')).toString('ascii');
 
   return {privateKey, publicKey};
+}
+
+function encryptValue(key, value) {
+  const baselinePath = getBaselinePath();
+  return publicEncrypt(key, Buffer.from(value)).toString('base64');
 }
 
 async function generateKeyPair(passphrase) {
@@ -145,5 +150,7 @@ async function runPublicPrivateKeyFlow() {
 }
 
 export {
-  runPublicPrivateKeyFlow
+  runPublicPrivateKeyFlow,
+  encryptValue,
+  getKeys
 };

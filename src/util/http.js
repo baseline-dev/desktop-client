@@ -15,7 +15,8 @@ function stopServer(server) {
 class Server {
   constructor() {
     this.routes = {
-      post: {}
+      post: {},
+      get: {}
     };
 
     // Binding to scope as the build tool doesn't support
@@ -45,11 +46,15 @@ class Server {
         case 'post':
           await this.handlePost(nodeReq, req, res);
           break;
+        case 'get':
+          await this.handleGet(nodeReq, req, res);
+          break;
         default:
           await this.noHandler(nodeReq, req, res);
           break;
       }
     } catch(e) {
+      console.log(e)
       res.status = 500;
     }
 
@@ -90,8 +95,22 @@ class Server {
     });
   }
 
+  async handleGet(nodeReq, req, res) {
+    const {pathname} = req.url;
+
+    if (typeof this.routes.get[pathname] === 'function') {
+      await this.routes.get[pathname]({}, res);
+    } else {
+      await this.noHandler(nodeReq, {}, res);
+    }
+  }
+
   post(route, handler) {
     this.routes.post[route] = handler;
+  }
+
+  get(route, handler) {
+    this.routes.get[route] = handler;
   }
 
   listen(port) {

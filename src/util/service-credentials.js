@@ -39,14 +39,14 @@ async function getServiceNamesFromCredentials() {
   return serviceNames;
 }
 
-async function writeServiceCredentialsToDisk(keys) {
+async function writeServiceCredentialsToDisk(credentials = '') {
   const file = path.join(homedir(), '.baseline', 'service-credentials');
 
   if (!existsSync(file)) {
     await mkdirSync(path.join(homedir(), '.baseline'), {recursive: true});
   }
 
-  await writeFileSync(file, Buffer.from(JSON.stringify(keys)).toString('base64'));
+  await writeFileSync(file, Buffer.from(JSON.stringify(credentials)).toString('base64'));
 }
 
 async function getServiceCredentials() {
@@ -61,6 +61,17 @@ async function getServiceCredentials() {
   }
 
   return credentials;
+}
+
+function addCredentials(existingServices, newServiceCredentials) {
+  const index = existingServices.findIndex((service) => {
+    return service.serviceId === newServiceCredentials.serviceId && service.profileId === newServiceCredentials.profileId;
+  });
+
+  if (index < 0) existingServices.push(newServiceCredentials);
+  else existingServices[index] = newServiceCredentials;
+
+  return existingServices;
 }
 
 async function useExistingCredentials(serviceNames) {
@@ -83,7 +94,7 @@ async function useExistingCredentials(serviceNames) {
 }
 
 function parseCredentials(credentials) {
-  return JSON.parse(Buffer.from(credentials, 'base64').toString('ascii'));
+  return JSON.parse(Buffer.from(credentials, 'base64').toString('ascii')) || [];
 }
 
 function waitForCredentials(port) {
@@ -134,5 +145,7 @@ async function runServiceCredentialFlow(publicKey, port, spinner) {
 
 export {
   runServiceCredentialFlow,
-  writeServiceCredentialsToDisk
+  getServiceCredentials,
+  writeServiceCredentialsToDisk,
+  addCredentials
 };

@@ -4,6 +4,9 @@ const SERVICES = {
   },
   github: {
     name: 'GitHub'
+  },
+  aws: {
+    name: 'AWS'
   }
 };
 

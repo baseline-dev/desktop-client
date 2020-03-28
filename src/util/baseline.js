@@ -15,6 +15,7 @@ import HEADER from '../template/header';
 import SERVICE_CONTAINER from '../template/service-container';
 import DETAILS_GITHUB from '../template/service-details-github';
 import DETAILS_SLACK from '../template/service-details-slack';
+import DETAILS_AWS from '../template/service-details-aws';
 import USER_ITEM from '../template/user-item';
 
 const TEMPLATES = {
@@ -23,6 +24,7 @@ const TEMPLATES = {
   SERVICE_CONTAINER,
   DETAILS_GITHUB,
   DETAILS_SLACK,
+  DETAILS_AWS,
   USER_ITEM
 };
 
@@ -52,7 +54,8 @@ function decryptServiceKeys(serviceKeys, privateKey, passphrase) {
         }
       });
     } catch(e) {
-      console.error(`  Something went wrong baselining ${SERVICES[service.serviceId].name}`);
+      console.log(e)
+      console.error(`\n  Something went wrong baselining ${SERVICES[service.serviceId].name}`);
     }
     return service;
   });

@@ -39,29 +39,17 @@ function post(url, body, options = {}) {
       });
 
       res.on('end', () => {
-        if (res.statusCode === 500) {
-          resolve({
-            status: 500,
-            body: body.toString()
-          });
-        } else if (res.statusCode === 401) {
-          resolve({
-            status: 401,
-            body: body.toString()
-          });
-        } else {
-          try {
-            resolve({
-              status: res.statusCode,
-              body: JSON.parse(body)
-            });
-          } catch(e) {
-            resolve({
-              status: 500,
-              body: e.message
-            });
-          }
+        let responseBody, responseStatus;
+        try {
+          responseBody = JSON.parse(body)
+        } catch(e) {
+          responseBody = body.toString();
         }
+
+        resolve({
+          status: res.statusCode,
+          body: responseBody
+        });
       })
     });
 

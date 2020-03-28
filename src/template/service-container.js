@@ -17,6 +17,12 @@ __p += '\n        ' +
 ((__t = ( data.templates.DETAILS_SLACK({service: data.service, templates: data.templates}) )) == null ? '' : __t) +
 '\n    ';
  } ;
+__p += '\n    ';
+ if (data.serviceKey == 'aws') { ;
+__p += '\n        ' +
+((__t = ( data.templates.DETAILS_AWS({service: data.service, templates: data.templates}) )) == null ? '' : __t) +
+'\n    ';
+ } ;
 __p += '\n</div>';
 return __p
 };

@@ -36,7 +36,11 @@ __p += '<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n 
 '\n<div class="mt-8 mx-auto max-w-screen-xl sm:mt-12 sm:px-24 md:mt-20 xl:mt-24">\n    ';
  Object.keys(data.users).forEach(function(email){ ;
 __p += '\n        ' +
-((__t = ( data.templates.USER_ITEM({user: data.users[email], templates: data.templates}) )) == null ? '' : __t) +
+((__t = ( data.templates.USER_ITEM({
+            user: data.users[email],
+            templates: data.templates,
+            baselineStaticAssetsUrl: data.baselineStaticAssetsUrl
+        }) )) == null ? '' : __t) +
 '\n    ';
  }); ;
 __p += '\n</div>\n</body>\n</html>\n';

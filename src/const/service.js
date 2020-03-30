@@ -7,6 +7,9 @@ const SERVICES = {
   },
   aws: {
     name: 'AWS'
+  },
+  cloudflare: {
+    name: 'Cloudflare'
   }
 };
 

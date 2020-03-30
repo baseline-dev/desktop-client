@@ -16,6 +16,7 @@ import SERVICE_CONTAINER from '../template/service-container';
 import DETAILS_GITHUB from '../template/service-details-github';
 import DETAILS_SLACK from '../template/service-details-slack';
 import DETAILS_AWS from '../template/service-details-aws';
+import DETAILS_CLOUDFLARE from '../template/service-details-cloudflare';
 import USER_ITEM from '../template/user-item';
 
 const TEMPLATES = {
@@ -25,6 +26,7 @@ const TEMPLATES = {
   DETAILS_GITHUB,
   DETAILS_SLACK,
   DETAILS_AWS,
+  DETAILS_CLOUDFLARE,
   USER_ITEM
 };
 

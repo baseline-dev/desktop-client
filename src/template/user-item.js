@@ -10,7 +10,12 @@ __p += '<div class="bg-white overflow-hidden sm:rounded-lg sm:shadow sm:mb-4 sm:
 '\n                            </a>\n                        </p>\n                    </div>\n                </div>\n            </div>\n            <div class="ml-4 mt-4 flex-shrink-0 flex">\n            </div>\n        </div>\n    </div>\n    <div>\n        ';
  Object.keys(data.user.services).forEach(function(serviceKey){ ;
 __p += '\n            ' +
-((__t = ( data.templates.SERVICE_CONTAINER({serviceKey: serviceKey, service: data.user.services[serviceKey], templates: data.templates}) )) == null ? '' : __t) +
+((__t = ( data.templates.SERVICE_CONTAINER({
+                serviceKey: serviceKey,
+                service: data.user.services[serviceKey],
+                templates: data.templates,
+                baselineStaticAssetsUrl: data.baselineStaticAssetsUrl
+            }) )) == null ? '' : __t) +
 '\n        ';
  }); ;
 __p += '\n    </div>\n</div>';

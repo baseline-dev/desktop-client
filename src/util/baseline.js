@@ -56,7 +56,6 @@ function decryptServiceKeys(serviceKeys, privateKey, passphrase) {
         }
       });
     } catch(e) {
-      console.log(e)
       console.error(`\n  Something went wrong baselining ${SERVICES[service.serviceId].name}`);
     }
     return service;

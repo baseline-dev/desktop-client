@@ -1,0 +1,35 @@
+<div class="bg-white overflow-hidden sm:rounded-lg sm:shadow sm:mb-4 sm:border-b sm:border-gray-200">
+    <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+        <div class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-no-wrap">
+            <div class="ml-4 mt-4">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <img class="h-12 w-12 rounded-full bg-gray-200" src="<%= data.user.avatar %>" alt="" />
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">
+                            <%= data.user.displayName %>
+                        </h3>
+                        <p class="text-sm leading-5 text-gray-500">
+                            <a href="#">
+                                <%= data.user.email %>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="ml-4 mt-4 flex-shrink-0 flex">
+            </div>
+        </div>
+    </div>
+    <div>
+        <% Object.keys(data.user.services).forEach(function(serviceKey){ %>
+            <%= data.templates.SERVICE_CONTAINER({
+                serviceKey: serviceKey,
+                service: data.user.services[serviceKey],
+                templates: data.templates,
+                baselineStaticAssetsUrl: data.baselineStaticAssetsUrl
+            }) %>
+        <% }); %>
+    </div>
+</div>

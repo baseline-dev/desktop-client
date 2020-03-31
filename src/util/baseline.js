@@ -10,14 +10,14 @@ import {exitRequestInvite} from './process';
 import {SERVICES} from '../const/service';
 import {getEventBus} from './event-bus';
 
-import REPORT from '../template/report';
-import HEADER from '../template/header';
-import SERVICE_CONTAINER from '../template/service-container';
-import DETAILS_GITHUB from '../template/service-details-github';
-import DETAILS_SLACK from '../template/service-details-slack';
-import DETAILS_AWS from '../template/service-details-aws';
-import DETAILS_CLOUDFLARE from '../template/service-details-cloudflare';
-import USER_ITEM from '../template/user-item';
+import REPORT from '../template/compiled/report';
+import HEADER from '../template/compiled/header';
+import SERVICE_CONTAINER from '../template/compiled/service-container';
+import DETAILS_GITHUB from '../template/compiled/service-details-github';
+import DETAILS_SLACK from '../template/compiled/service-details-slack';
+import DETAILS_AWS from '../template/compiled/service-details-aws';
+import DETAILS_CLOUDFLARE from '../template/compiled/service-details-cloudflare';
+import USER_ITEM from '../template/compiled/user-item';
 
 const TEMPLATES = {
   REPORT,

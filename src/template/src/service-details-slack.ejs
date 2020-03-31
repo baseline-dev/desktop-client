@@ -1,0 +1,36 @@
+<div class="sm:mx-2 my-2">
+    <table class="text-left w-full rounded-md">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 font-bold uppercase text-sm text-gray-600">
+                    Team Name
+                </th>
+                <th class="py-2 px-4 font-bold uppercase text-sm text-gray-600">
+                    Permissions
+                </th>
+                <th class="py-2 px-4 font-bold uppercase text-sm text-gray-600">
+                    Has MFA
+                </th>
+                <th class="py-2 px-4 font-bold uppercase text-sm text-gray-600">
+                    Is Active
+                </th>
+                <th class="py-2 px-4 font-bold uppercase text-sm text-gray-600">
+                    Is Bot
+                </th>
+            </tr>
+        </thead>
+        <%  data.service.items.forEach((service) => { %>
+        <tr class="text-gray-800">
+            <td class="py-2 px-4">
+                <a href="https://<%= service.teamDomain %>.slack.com/admin" target="_blank" class="underline">
+                    <%= service.teamName %>
+                </a>
+            </td>
+            <td class="py-2 px-4"><%=  service.permissions.join(", ")  %></td>
+            <td class="py-2 px-4"><i class="fas <% if (service.has2fa) { %>fa-check text-teal-800<% } else { %>fa-times text-pink-800<% } %> fa-1x"/></td>
+            <td class="py-2 px-4"><i class="fas <% if (service.isActive) { %>fa-check text-teal-800<% } else { %>fa-times text-pink-800<% } %> fa-1x"/></td>
+            <td class="py-2 px-4"><i class="fas <% if (service.isBot) { %>fa-check text-teal-800<% } else { %>fa-times text-pink-800<% } %> fa-1x"/></td>
+        </tr>
+        <% }); %>
+    </table>
+</div>

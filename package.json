@@ -12,8 +12,9 @@
     "lint": "",
     "coverage": "nyc --require esm --reporter=lcov --reporter=text-summary npm run test:unit",
     "build": "rollup --config",
-    "build-osx": "NODE_ENV=production npm run build && pkg package.json -o dist/baseline-macos && chmod +x dist/baseline-macos && npm run zip-osx",
-    "zip-osx": "zip -j dist/baseline-macos.zip dist/baseline-macos"
+    "build:osx": "NODE_ENV=production npm run build && pkg package.json -o dist/baseline-macos && chmod +x dist/baseline-macos && npm run zip:osx",
+    "build:templates": "node -r esm script/build-templates.js",
+    "zip:osx": "zip -j dist/baseline-macos.zip dist/baseline-macos"
   },
   "author": "Nikolai Onken",
   "license": "Apache 2.0",
@@ -30,7 +31,6 @@
     "chalk": "^3.0.0",
     "commander": "^5.0.0",
     "lodash.merge": "^4.6.2",
-    "lodash.template": "^4.5.0",
     "open": "^7.0.2",
     "ora": "^4.0.3",
     "pkg": "^4.4.4",
@@ -41,6 +41,7 @@
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-json": "^4.0.2",
     "esm": "^3.2.25",
+    "lodash.template": "^4.5.0",
     "node-env-file": "^0.1.8",
     "nyc": "^15.0.0",
     "rollup": "^2.0.6",

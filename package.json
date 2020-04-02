@@ -14,7 +14,8 @@
     "build": "rollup --config",
     "build:osx": "NODE_ENV=production npm run build && pkg package.json -o dist/baseline-macos && chmod +x dist/baseline-macos && npm run zip:osx",
     "build:templates": "node -r esm script/build-templates.js",
-    "zip:osx": "zip -j dist/baseline-macos.zip dist/baseline-macos"
+    "zip:osx": "zip -j dist/baseline-macos.zip dist/baseline-macos",
+    "start": "node -r esm src/index.js"
   },
   "author": "Nikolai Onken",
   "license": "Apache 2.0",

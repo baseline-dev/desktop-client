@@ -25,8 +25,8 @@
     <div>
         <% Object.keys(data.user.services).forEach(function(serviceKey){ %>
             <%= data.templates.SERVICE_CONTAINER({
-                serviceKey: serviceKey,
-                service: data.user.services[serviceKey],
+                service: data.services[serviceKey],
+                serviceItems: data.user.services[serviceKey],
                 templates: data.templates,
                 baselineStaticAssetsUrl: data.baselineStaticAssetsUrl
             }) %>

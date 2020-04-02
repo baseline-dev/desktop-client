@@ -10,13 +10,14 @@
             </th>
         </tr>
         </thead>
-        <% data.service.items.forEach((service) => { %>
+        <% data.serviceItems.forEach((item) => { %>
             <tr class="text-gray-800">
                 <td class="py-2 px-4">
-                    <%= service.organizationName %>
+                    <%= item.service.organizationName %><br />
+                    <small class="text-sm text-gray-500"><%= item.service.email %></small>
                 </td>
                 <td class="py-2 px-4">
-                    <%= service.status %>
+                    <%= item.service.status %>
                 </td>
             </tr>
         <% }); %>

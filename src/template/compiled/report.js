@@ -39,6 +39,7 @@ __p += '\n        ' +
 ((__t = ( data.templates.USER_ITEM({
             user: data.users[email],
             templates: data.templates,
+            services: data.services,
             baselineStaticAssetsUrl: data.baselineStaticAssetsUrl
         }) )) == null ? '' : __t) +
 '\n    ';

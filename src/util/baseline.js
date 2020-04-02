@@ -78,6 +78,7 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
 
     const file = await REPORT({
       users: response.body.result,
+      services: SERVICES,
       baselineStaticAssetsUrl: config.baselineStaticAssetsUrl,
       templates: TEMPLATES
     });

@@ -11,8 +11,8 @@ __p += '<div class="bg-white overflow-hidden sm:rounded-lg sm:shadow sm:mb-4 sm:
  Object.keys(data.user.services).forEach(function(serviceKey){ ;
 __p += '\n            ' +
 ((__t = ( data.templates.SERVICE_CONTAINER({
-                serviceKey: serviceKey,
-                service: data.user.services[serviceKey],
+                service: data.services[serviceKey],
+                serviceItems: data.user.services[serviceKey],
                 templates: data.templates,
                 baselineStaticAssetsUrl: data.baselineStaticAssetsUrl
             }) )) == null ? '' : __t) +

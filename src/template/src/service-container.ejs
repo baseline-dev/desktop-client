@@ -1,22 +1,26 @@
+
 <div>
-    <div class="flex items-center px-4 py-5 sm:px-6 bg-gray-100">
-        <div class="rounded-full flex items-center justify-center text-gray-600">
-            <img src="<%= data.baselineStaticAssetsUrl %>/img/services/<%= data.service.icon %>" width="20" alt="<%= data.service.name %>"/>
+    <div>
+        <div class="flex items-center px-4 py-5 sm:px-6 bg-gray-100">
+            <div class="rounded-full flex items-center justify-center text-gray-600">
+                <img src="<%= data.baselineStaticAssetsUrl %>/img/services/<%= data.service.icon %>" width="20" alt="<%= data.service.label %>"/>
+            </div>
+            <h2 class="ml-1 text-lg leading-5 font-medium text-gray-700">
+                <%= data.service.label %>
+            </h2>
         </div>
-        <h2 class="ml-1 text-lg leading-5 font-medium text-gray-700">
-            <%= data.service.name %>
-        </h2>
     </div>
-    <% if (data.serviceKey == 'github') { %>
-        <%= data.templates.DETAILS_GITHUB({service: data.service, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
+    <% if (data.service.name == 'github') { %>
+    <% data.serviceItems %>
+        <%= data.templates.DETAILS_GITHUB({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
     <% } %>
-    <% if (data.serviceKey == 'slack') { %>
-        <%= data.templates.DETAILS_SLACK({service: data.service, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
+    <% if (data.service.name == 'slack') { %>
+        <%= data.templates.DETAILS_SLACK({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
     <% } %>
-    <% if (data.serviceKey == 'aws') { %>
-        <%= data.templates.DETAILS_AWS({service: data.service, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
+    <% if (data.service.name == 'aws') { %>
+        <%= data.templates.DETAILS_AWS({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
     <% } %>
-    <% if (data.serviceKey == 'cloudflare') { %>
-        <%= data.templates.DETAILS_CLOUDFLARE({service: data.service, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
+    <% if (data.service.name == 'cloudflare') { %>
+        <%= data.templates.DETAILS_CLOUDFLARE({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
     <% } %>
 </div>

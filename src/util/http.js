@@ -54,7 +54,6 @@ class Server {
           break;
       }
     } catch(e) {
-      console.log(e)
       res.status = 500;
     }
 

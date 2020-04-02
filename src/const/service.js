@@ -1,15 +1,23 @@
 const SERVICES = {
   slack: {
-    name: 'Slack'
+    name: 'slack',
+    label: 'Slack',
+    icon: 'slack.svg'
   },
   github: {
-    name: 'GitHub'
+    name: 'github',
+    label: 'GitHub',
+    icon: 'github.svg'
   },
   aws: {
-    name: 'AWS'
+    name: 'aws',
+    label: 'AWS',
+    icon: 'aws.svg'
   },
   cloudflare: {
-    name: 'Cloudflare'
+    name: 'cloudflare',
+    label: 'Cloudflare',
+    icon: 'cloudflare.svg'
   }
 };
 

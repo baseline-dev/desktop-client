@@ -19,17 +19,17 @@
                 </th>
             </tr>
         </thead>
-        <%  data.service.items.forEach((service) => { %>
+        <%  data.serviceItems.forEach((item) => { %>
         <tr class="text-gray-800">
             <td class="py-2 px-4">
-                <a href="https://<%= service.teamDomain %>.slack.com/admin" target="_blank" class="underline">
-                    <%= service.teamName %>
+                <a href="https://<%= item.service.teamDomain %>.slack.com/admin" target="_blank" class="underline">
+                    <%= item.service.teamName %>
                 </a>
             </td>
-            <td class="py-2 px-4"><%=  service.permissions.join(", ")  %></td>
-            <td class="py-2 px-4"><i class="fas <% if (service.has2fa) { %>fa-check text-teal-800<% } else { %>fa-times text-pink-800<% } %> fa-1x"/></td>
-            <td class="py-2 px-4"><i class="fas <% if (service.isActive) { %>fa-check text-teal-800<% } else { %>fa-times text-pink-800<% } %> fa-1x"/></td>
-            <td class="py-2 px-4"><i class="fas <% if (service.isBot) { %>fa-check text-teal-800<% } else { %>fa-times text-pink-800<% } %> fa-1x"/></td>
+            <td class="py-2 px-4"><%=  item.user.permissions.join(", ")  %></td>
+            <td class="py-2 px-4"><i class="fas <% if (item.user.has2fa) { %>fa-check text-teal-800<% } else { %>fa-times text-pink-800<% } %> fa-1x"/></td>
+            <td class="py-2 px-4"><i class="fas <% if (item.user.isActive) { %>fa-check text-teal-800<% } else { %>fa-times text-pink-800<% } %> fa-1x"/></td>
+            <td class="py-2 px-4"><i class="fas <% if (item.user.isBot) { %>fa-check text-teal-800<% } else { %>fa-times text-pink-800<% } %> fa-1x"/></td>
         </tr>
         <% }); %>
     </table>

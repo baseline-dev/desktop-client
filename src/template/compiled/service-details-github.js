@@ -8,7 +8,7 @@ __p += '\n        <tr class="text-gray-800">\n            <td class="py-2 px-4">
 '/people" target="_blank" class="underline">\n                    ' +
 ((__t = ( item.service.organizationName )) == null ? '' : __t) +
 '\n                </a>\n            </td>\n            <td class="py-2 px-4"><i class="fas ';
- if (item.service.enforces2fa) { ;
+ if (item.service.enforcesMfa) { ;
 __p += 'fa-check text-teal-800';
  } else { ;
 __p += 'fa-times text-pink-800';

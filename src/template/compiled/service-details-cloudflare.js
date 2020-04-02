@@ -14,7 +14,7 @@ __p += 'fa-times text-pink-800';
 __p += ' fa-1x"/></td>\n                <td class="py-2 px-4">' +
 ((__t = (  item.user.permissions.join(", ")  )) == null ? '' : __t) +
 '</td>\n                <td class="py-2 px-4"><i class="fas ';
- if (item.user.has2fa) { ;
+ if (item.user.hasMfa) { ;
 __p += 'fa-check text-teal-800';
  } else { ;
 __p += 'fa-times text-pink-800';

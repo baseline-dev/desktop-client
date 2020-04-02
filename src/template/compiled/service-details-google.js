@@ -6,7 +6,7 @@ __p += '<div class="sm:mx-2 my-2">\n    <table class="text-left w-full rounded-m
 __p += '\n            <tr class="text-gray-800">\n                <td class="py-2 px-4">\n                    ' +
 ((__t = ( item.user.email )) == null ? '' : __t) +
 '<br />\n                </td>\n                <td class="py-2 px-4"><i class="fas ';
- if (item.user.has2Fa) { ;
+ if (item.user.hasMfa) { ;
 __p += 'fa-check text-teal-800';
  } else { ;
 __p += 'fa-times text-pink-800';

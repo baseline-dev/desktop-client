@@ -18,6 +18,11 @@ const SERVICES = {
     name: 'cloudflare',
     label: 'Cloudflare',
     icon: 'cloudflare.svg'
+  },
+  google: {
+    name: 'google',
+    label: 'Google',
+    icon: 'google.svg'
   }
 };
 

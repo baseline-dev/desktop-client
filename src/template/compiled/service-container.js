@@ -35,6 +35,12 @@ __p += '\n        ' +
 ((__t = ( data.templates.DETAILS_CLOUDFLARE({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) )) == null ? '' : __t) +
 '\n    ';
  } ;
+__p += '\n    ';
+ if (data.service.name == 'google') { ;
+__p += '\n        ' +
+((__t = ( data.templates.DETAILS_GOOGLE({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) )) == null ? '' : __t) +
+'\n    ';
+ } ;
 __p += '\n</div>';
 return __p
 };

@@ -23,4 +23,7 @@
     <% if (data.service.name == 'cloudflare') { %>
         <%= data.templates.DETAILS_CLOUDFLARE({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
     <% } %>
+    <% if (data.service.name == 'google') { %>
+        <%= data.templates.DETAILS_GOOGLE({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
+    <% } %>
 </div>

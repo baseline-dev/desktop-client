@@ -1,0 +1,24 @@
+<div class="sm:mx-2 my-2">
+    <table class="text-left w-full rounded-md">
+        <thead>
+        <tr>
+            <th class="py-2 px-4 font-bold uppercase text-sm text-gray-600">
+                Email
+            </th>
+            <th class="py-2 px-4 font-bold uppercase text-sm text-gray-600">
+                Is Admin
+            </th>
+        </tr>
+        </thead>
+        <% data.serviceItems.forEach((item) => { %>
+            <tr class="text-gray-800">
+                <td class="py-2 px-4">
+                    <%= item.user.email %><br />
+                </td>
+                <td class="py-2 px-4">
+                    <i class="fas <% if (item.user.isAdmin) { %>fa-check text-teal-800<% } else { %>fa-times text-pink-800<% } %> fa-1x"/>
+                </td>
+            </tr>
+        <% }); %>
+    </table>
+</div>

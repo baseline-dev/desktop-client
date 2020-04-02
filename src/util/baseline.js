@@ -17,6 +17,7 @@ import DETAILS_GITHUB from '../template/compiled/service-details-github';
 import DETAILS_SLACK from '../template/compiled/service-details-slack';
 import DETAILS_AWS from '../template/compiled/service-details-aws';
 import DETAILS_CLOUDFLARE from '../template/compiled/service-details-cloudflare';
+import DETAILS_GOOGLE from '../template/compiled/service-details-google';
 import USER_ITEM from '../template/compiled/user-item';
 
 const TEMPLATES = {
@@ -27,6 +28,7 @@ const TEMPLATES = {
   DETAILS_SLACK,
   DETAILS_AWS,
   DETAILS_CLOUDFLARE,
+  DETAILS_GOOGLE,
   USER_ITEM
 };
 
@@ -63,10 +65,9 @@ function decryptServiceKeys(serviceKeys, privateKey, passphrase) {
 }
 
 async function baseline(serviceKeys, privateKey, passphrase, spinner) {
-  serviceKeys = decryptServiceKeys(serviceKeys, privateKey, passphrase);
-
   spinner.text = chalk.bold('Baselining services, please be patient.');
 
+  serviceKeys = decryptServiceKeys(serviceKeys, privateKey, passphrase);
   const response = await post(`/v1/baseline`, serviceKeys);
 
   if (response.status === 401) {

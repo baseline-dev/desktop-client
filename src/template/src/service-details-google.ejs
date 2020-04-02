@@ -6,6 +6,9 @@
                 Email
             </th>
             <th class="py-2 px-4 font-bold uppercase text-sm text-gray-600">
+                Has MFA
+            </th>
+            <th class="py-2 px-4 font-bold uppercase text-sm text-gray-600">
                 Is Admin
             </th>
         </tr>
@@ -15,6 +18,7 @@
                 <td class="py-2 px-4">
                     <%= item.user.email %><br />
                 </td>
+                <td class="py-2 px-4"><i class="fas <% if (item.user.has2Fa) { %>fa-check text-teal-800<% } else { %>fa-times text-pink-800<% } %> fa-1x"/></td>
                 <td class="py-2 px-4">
                     <i class="fas <% if (item.user.isAdmin) { %>fa-check text-teal-800<% } else { %>fa-times text-pink-800<% } %> fa-1x"/>
                 </td>

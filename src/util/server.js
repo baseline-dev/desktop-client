@@ -45,10 +45,7 @@ app.post('/baseline/credentials/encrypt', async (ctx, res) => {
 
   if (body.status === 'error') {
     res.status = status;
-    res.body = {
-      status: 'error',
-      message: body.message
-    };
+    res.body = body;
     return;
   }
 

@@ -1,3 +1,4 @@
+<% if (Object.keys(data.errors).length) { %>
 <div class="bg-white overflow-hidden sm:rounded-lg sm:shadow sm:mb-4 sm:border-b sm:border-gray-200">
     <div class="px-4 py-5 sm:px-6 grid gap-4">
         <% Object.keys(data.errors).forEach(function(serviceKey){ %>
@@ -13,3 +14,4 @@
         <% }); %>
     </div>
 </div>
+<% } %>

@@ -48,17 +48,6 @@ __p += '\n        ' +
         }) )) == null ? '' : __t) +
 '\n    ';
  }); ;
-__p += '\n    ';
- Object.keys(data.users).forEach(function(email){ ;
-__p += '\n        ' +
-((__t = ( data.templates.USER_ITEM({
-            user: data.users[email],
-            templates: data.templates,
-            services: data.services,
-            baselineStaticAssetsUrl: data.baselineStaticAssetsUrl
-        }) )) == null ? '' : __t) +
-'\n    ';
- }); ;
 __p += '\n</div>\n</body>\n</html>\n';
 return __p
 };

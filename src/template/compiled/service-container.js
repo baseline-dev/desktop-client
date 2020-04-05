@@ -41,6 +41,12 @@ __p += '\n        ' +
 ((__t = ( data.templates.DETAILS_GOOGLE({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) )) == null ? '' : __t) +
 '\n    ';
  } ;
+__p += '\n    ';
+ if (data.service.name == 'wordpress-selfhosted') { ;
+__p += '\n        ' +
+((__t = ( data.templates.DETAILS_WORDPRESS_SELFHOSTED({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) )) == null ? '' : __t) +
+'\n    ';
+ } ;
 __p += '\n</div>';
 return __p
 };

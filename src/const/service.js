@@ -23,6 +23,11 @@ const SERVICES = {
     name: 'google',
     label: 'Google',
     icon: 'google.svg'
+  },
+  'wordpress-selfhosted': {
+    name: 'wordpress-selfhosted',
+    label: 'Wordpress Selfhosted',
+    icon: 'wordpress.svg'
   }
 };
 

@@ -12,26 +12,28 @@ import {getEventBus} from './event-bus';
 
 import REPORT from '../template/compiled/report';
 import HEADER from '../template/compiled/header';
+import USER_ITEM from '../template/compiled/user-item';
 import SERVICE_CONTAINER from '../template/compiled/service-container';
+import SERVICE_ERRORS from '../template/compiled/service-errors';
 import DETAILS_GITHUB from '../template/compiled/service-details-github';
 import DETAILS_SLACK from '../template/compiled/service-details-slack';
 import DETAILS_AWS from '../template/compiled/service-details-aws';
 import DETAILS_CLOUDFLARE from '../template/compiled/service-details-cloudflare';
 import DETAILS_GOOGLE from '../template/compiled/service-details-google';
 import DETAILS_WORDPRESS_SELFHOSTED from '../template/compiled/service-details-wordpress-selfhosted';
-import USER_ITEM from '../template/compiled/user-item';
 
 const TEMPLATES = {
   REPORT,
   HEADER,
+  USER_ITEM,
   SERVICE_CONTAINER,
+  SERVICE_ERRORS,
   DETAILS_GITHUB,
   DETAILS_SLACK,
   DETAILS_AWS,
   DETAILS_CLOUDFLARE,
   DETAILS_GOOGLE,
-  DETAILS_WORDPRESS_SELFHOSTED,
-  USER_ITEM
+  DETAILS_WORDPRESS_SELFHOSTED
 };
 
 const eventBus = getEventBus();
@@ -80,7 +82,8 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
     spinner.succeed(chalk.bold('Baselining complete. Opening results in your browser.'));
 
     const file = await REPORT({
-      users: response.body.result,
+      users: response.body.result.users,
+      errors: response.body.result.errors,
       services: SERVICES,
       baselineStaticAssetsUrl: config.baselineStaticAssetsUrl,
       templates: TEMPLATES

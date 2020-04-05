@@ -33,7 +33,22 @@ __p += '<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n 
 ((__t = ( data.baselineStaticAssetsUrl )) == null ? '' : __t) +
 '/css/style.css">\n</head>\n\n<body class="bg-gray-200 mt-20">\n' +
 ((__t = ( data.templates.HEADER({baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) )) == null ? '' : __t) +
-'\n<div class="mt-8 mx-auto max-w-screen-xl sm:mt-12 sm:px-24 md:mt-20 xl:mt-24">\n    ';
+'\n<div class="mt-8 mx-auto max-w-screen-xl sm:mt-12 sm:px-24 md:mt-20 xl:mt-24">\n    ' +
+((__t = ( data.templates.SERVICE_ERRORS({
+        errors: data.errors
+    }) )) == null ? '' : __t) +
+'\n    ';
+ Object.keys(data.users).forEach(function(email){ ;
+__p += '\n        ' +
+((__t = ( data.templates.USER_ITEM({
+            user: data.users[email],
+            templates: data.templates,
+            services: data.services,
+            baselineStaticAssetsUrl: data.baselineStaticAssetsUrl
+        }) )) == null ? '' : __t) +
+'\n    ';
+ }); ;
+__p += '\n    ';
  Object.keys(data.users).forEach(function(email){ ;
 __p += '\n        ' +
 ((__t = ( data.templates.USER_ITEM({

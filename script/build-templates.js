@@ -7,14 +7,15 @@ const OUTPUT_PATH = './src/template/compiled';
 [
   'report',
   'header',
+  'user-item',
   'service-container',
+  'service-errors',
   'service-details-github',
   'service-details-aws',
   'service-details-slack',
   'service-details-cloudflare',
   'service-details-google',
-  'service-details-wordpress-selfhosted',
-  'user-item'
+  'service-details-wordpress-selfhosted'
 ].forEach((file) => {
   const compiledTemplate = template(readFileSync(`${TEMPLATE_PATH}/${file}.ejs`, 'utf8'), {
     variable: 'data'

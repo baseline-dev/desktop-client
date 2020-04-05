@@ -33,6 +33,17 @@
 <body class="bg-gray-200 mt-20">
 <%= data.templates.HEADER({baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
 <div class="mt-8 mx-auto max-w-screen-xl sm:mt-12 sm:px-24 md:mt-20 xl:mt-24">
+    <%= data.templates.SERVICE_ERRORS({
+        errors: data.errors
+    }) %>
+    <% Object.keys(data.users).forEach(function(email){ %>
+        <%= data.templates.USER_ITEM({
+            user: data.users[email],
+            templates: data.templates,
+            services: data.services,
+            baselineStaticAssetsUrl: data.baselineStaticAssetsUrl
+        }) %>
+    <% }); %>
     <% Object.keys(data.users).forEach(function(email){ %>
         <%= data.templates.USER_ITEM({
             user: data.users[email],

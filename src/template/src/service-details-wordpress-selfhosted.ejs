@@ -16,13 +16,13 @@
         <% data.serviceItems.forEach((item) => { %>
             <tr class="text-gray-800">
                 <td class="py-2 px-4">
-                    <%= item.user.email %><br />
+                    <%= item.userEmail %><br />
                 </td>
                 <td class="py-2 px-4">
-                    <%=  item.user.permissions.join(", ")  %>
+                    <%=  item.userPermissions.join(", ")  %>
                 </td>
                 <td class="py-2 px-4">
-                    <a href="<%= item.user.link %>"><%= item.user.userName %></a>
+                    <a href="<%= item.userLink %>"><%= item.userName %></a>
                 </td>
             </tr>
         <% }); %>

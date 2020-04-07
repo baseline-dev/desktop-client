@@ -1,0 +1,8 @@
+<% Object.keys(data.resources).forEach(function(service){ %>
+    <% if (service == 'aws') { %>
+        <%= data.templates.RESOURCES_AWS({resources: data.resources[service], templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
+    <% } %>
+    <% if (service == 'google-cloud') { %>
+        <%= data.templates.RESOURCES_GCLOUD({resources: data.resources[service], templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
+    <% } %>
+<% }) %>

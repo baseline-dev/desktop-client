@@ -29,26 +29,39 @@ __p += '<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n 
 ((__t = ( data.baselineStaticAssetsUrl )) == null ? '' : __t) +
 '/img/favicon/favicon-96x96.png">\n    <link rel="icon" type="image/png" sizes="16x16" href="' +
 ((__t = ( data.baselineStaticAssetsUrl )) == null ? '' : __t) +
-'/img/favicon/favicon-16x16.png">\n    <meta name="msapplication-TileColor" content="#ffffff">\n    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">\n    <meta name="theme-color" content="#ffffff">\n    <meta name="msapplication-config" content="https://static.Baseline.dev/web/favicon/browserconfig.xml">\n    <meta name="apple-mobile-web-app-capable" content="yes">\n    <meta name="mobile-web-app-capable" content="yes">\n    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">\n    \n    <title>Baseline Report</title>\n    <script src="https://kit.fontawesome.com/7d3ec3600d.js" crossorigin="anonymous"></script>\n    <link rel="stylesheet" href="' +
+'/img/favicon/favicon-16x16.png">\n    <meta name="msapplication-TileColor" content="#ffffff">\n    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">\n    <meta name="theme-color" content="#ffffff">\n    <meta name="msapplication-config" content="https://static.Baseline.dev/web/favicon/browserconfig.xml">\n    <meta name="apple-mobile-web-app-capable" content="yes">\n    <meta name="mobile-web-app-capable" content="yes">\n    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">\n    \n    <title>Baseline Report</title>\n    <link rel="stylesheet" href="' +
 ((__t = ( data.baselineStaticAssetsUrl )) == null ? '' : __t) +
-'/css/style.css">\n</head>\n\n<body class="bg-gray-200 mt-20">\n' +
-((__t = ( data.templates.HEADER({baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) )) == null ? '' : __t) +
+'/css/style.css">\n    <script src="' +
+((__t = ( data.baselineStaticAssetsUrl )) == null ? '' : __t) +
+'/js/alpine.js" defer></script>\n    <script>\n      function init() {\n        return {\n          tab: \'users\'\n        }\n      }\n    </script>\n</head>\n\n<body class="bg-gray-200 mt-20" x-data="{ tab: \'users\' }">\n' +
+((__t = ( data.templates.HEADER({
+    baselineStaticAssetsUrl: data.baselineStaticAssetsUrl,
+    users: data.users,
+    resources: data.resources
+}) )) == null ? '' : __t) +
 '\n<div class="mt-8 mx-auto max-w-screen-xl sm:mt-12 sm:px-24 md:mt-20 xl:mt-24">\n    ' +
 ((__t = ( data.templates.SERVICE_ERRORS({
         errors: data.errors
     }) )) == null ? '' : __t) +
-'\n    ';
- Object.keys(data.users).forEach(function(email){ ;
+'\n    <div x-show="tab === \'users\'">\n    ';
+ data.users.forEach(function(user){ ;
 __p += '\n        ' +
 ((__t = ( data.templates.USER_ITEM({
-            user: data.users[email],
+            user,
             templates: data.templates,
             services: data.services,
             baselineStaticAssetsUrl: data.baselineStaticAssetsUrl
         }) )) == null ? '' : __t) +
 '\n    ';
  }); ;
-__p += '\n</div>\n</body>\n</html>\n';
+__p += '\n    </div>\n    <div x-show="tab === \'resources\'">\n    ' +
+((__t = ( data.templates.RESOURCES_CONTAINER({
+        resources: data.resources,
+        templates: data.templates,
+        services: data.services,
+        baselineStaticAssetsUrl: data.baselineStaticAssetsUrl
+    }) )) == null ? '' : __t) +
+'\n    </div>\n</div>\n</body>\n</html>\n';
 return __p
 };
 export {template as default}

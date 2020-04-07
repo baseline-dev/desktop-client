@@ -47,6 +47,10 @@ app.post('/baseline/credentials/encrypt', async (ctx, res) => {
     res.status = status;
     res.body = body;
     return;
+  } else if (body.status === 'ok' && body.result.errors.length) {
+    res.status = 500;
+    res.body = body.result.errors;
+    return;
   }
 
   const {publicKey} = await getKeys();

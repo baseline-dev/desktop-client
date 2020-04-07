@@ -11,8 +11,6 @@ __p += '\n<div>\n    <div>\n        <div class="flex items-center px-4 py-5 sm:p
 ((__t = ( data.service.label )) == null ? '' : __t) +
 '\n            </h2>\n        </div>\n    </div>\n    ';
  if (data.service.name == 'github') { ;
-__p += '\n    ';
- data.serviceItems ;
 __p += '\n        ' +
 ((__t = ( data.templates.DETAILS_GITHUB({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) )) == null ? '' : __t) +
 '\n    ';
@@ -36,7 +34,13 @@ __p += '\n        ' +
 '\n    ';
  } ;
 __p += '\n    ';
- if (data.service.name == 'google') { ;
+ if (data.service.name == 'google-suite') { ;
+__p += '\n        ' +
+((__t = ( data.templates.DETAILS_GOOGLE({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) )) == null ? '' : __t) +
+'\n    ';
+ } ;
+__p += '\n    ';
+ if (data.service.name == 'google-cloud') { ;
 __p += '\n        ' +
 ((__t = ( data.templates.DETAILS_GOOGLE({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) )) == null ? '' : __t) +
 '\n    ';

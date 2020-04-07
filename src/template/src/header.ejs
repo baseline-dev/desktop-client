@@ -6,7 +6,18 @@
                     <img class="h-8 w-auto sm:h-10" src="<%= data.baselineStaticAssetsUrl %>/img/logo/logo.png" alt=""/>
                 </a>
             </div>
-            <div class="hidden md:block md:ml-10"></div>
+            <div class="hidden sm:-my-px sm:ml-6 sm:flex">
+                <% if (data.users && data.users.length) { %>
+                <a href="#" :class="{ 'border-pink-500 font-medium': tab === 'users' }" @click="tab = 'users'" class="inline-flex items-center px-1 pt-1 border-b-2 text-sm leading-5 text-gray-900 focus:outline-none transition duration-150 ease-in-out">
+                    Users
+                </a>
+                <% } %>
+                <% if (data.resources && Object.keys(data.resources).length) { %>
+                <a href="#" :class="{ 'border-pink-500 font-medium': tab === 'resources' }" @click="tab = 'resources'" class="ml-8 inline-flex items-center px-1 pt-1 border-b-2 text-sm leading-5 text-gray-900 focus:outline-none transition duration-150 ease-in-out">
+                    Resources
+                </a>
+                <% } %>
+            </div>
         </div>
         <div class="hidden md:block text-right">
             <span class="inline-flex rounded-md shadow-md"></span>

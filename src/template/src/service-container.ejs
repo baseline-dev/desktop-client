@@ -11,7 +11,6 @@
         </div>
     </div>
     <% if (data.service.name == 'github') { %>
-    <% data.serviceItems %>
         <%= data.templates.DETAILS_GITHUB({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
     <% } %>
     <% if (data.service.name == 'slack') { %>
@@ -23,7 +22,10 @@
     <% if (data.service.name == 'cloudflare') { %>
         <%= data.templates.DETAILS_CLOUDFLARE({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
     <% } %>
-    <% if (data.service.name == 'google') { %>
+    <% if (data.service.name == 'google-suite') { %>
+        <%= data.templates.DETAILS_GOOGLE({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
+    <% } %>
+    <% if (data.service.name == 'google-cloud') { %>
         <%= data.templates.DETAILS_GOOGLE({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) %>
     <% } %>
     <% if (data.service.name == 'wordpress-selfhosted') { %>

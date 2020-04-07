@@ -24,6 +24,16 @@ const SERVICES = {
     label: 'Google',
     icon: 'google.svg'
   },
+  'google-cloud': {
+    name: 'google-cloud',
+    label: 'Google Cloud',
+    icon: 'google.svg'
+  },
+  'google-suite': {
+    name: 'google-suite',
+    label: 'Google Suite',
+    icon: 'google.svg'
+  },
   'wordpress-selfhosted': {
     name: 'wordpress-selfhosted',
     label: 'Wordpress Selfhosted',

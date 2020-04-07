@@ -30,7 +30,7 @@ async function getServiceNamesFromCredentials() {
   try {
     credentials = JSON.parse(Buffer.from(credentials, 'base64').toString('ascii'));
     serviceNames = credentials.map((service) => {
-      return SERVICES[service.serviceId].name;
+      return SERVICES[service.name].label;
     });
   } catch(e) {
     console.log('  Error parsing credentials');
@@ -65,7 +65,7 @@ async function getServiceCredentials() {
 
 function addCredentials(existingServices, newServiceCredentials) {
   const index = existingServices.findIndex((service) => {
-    return service.serviceId === newServiceCredentials.serviceId && service.profileId === newServiceCredentials.profileId;
+    return service.service === newServiceCredentials.service && service.profileId === newServiceCredentials.profileId;
   });
 
   if (index < 0) existingServices.push(newServiceCredentials);

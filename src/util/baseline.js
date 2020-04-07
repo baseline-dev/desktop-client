@@ -13,6 +13,9 @@ import {getEventBus} from './event-bus';
 import REPORT from '../template/compiled/report';
 import HEADER from '../template/compiled/header';
 import USER_ITEM from '../template/compiled/user-item';
+import RESOURCES_CONTAINER from '../template/compiled/resources-container';
+import RESOURCES_AWS from '../template/compiled/resources-aws';
+import RESOURCES_GCLOUD from '../template/compiled/resources-gcloud';
 import SERVICE_CONTAINER from '../template/compiled/service-container';
 import SERVICE_ERRORS from '../template/compiled/service-errors';
 import DETAILS_GITHUB from '../template/compiled/service-details-github';
@@ -26,6 +29,9 @@ const TEMPLATES = {
   REPORT,
   HEADER,
   USER_ITEM,
+  RESOURCES_CONTAINER,
+  RESOURCES_AWS,
+  RESOURCES_GCLOUD,
   SERVICE_CONTAINER,
   SERVICE_ERRORS,
   DETAILS_GITHUB,
@@ -62,7 +68,7 @@ function decryptServiceKeys(serviceKeys, privateKey, passphrase) {
         }
       });
     } catch(e) {
-      console.error(`\n  Something went wrong baselining ${SERVICES[service.serviceId].name}`);
+      console.error(`\n  Something went wrong baselining ${SERVICES[service.service].name}`);
     }
     return service;
   });
@@ -82,8 +88,15 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
     spinner.succeed(chalk.bold('Baselining complete. Opening results in your browser.'));
 
     const file = await REPORT({
-      users: response.body.result.users,
-      errors: response.body.result.errors,
+      users: response.body.result.users || [],
+      resources: response.body.result.resources.reduce((prev, next) => {
+        if (!prev[next.service]) {
+          prev[next.service] = [];
+        }
+        prev[next.service].push(next);
+        return prev;
+      }, {}),
+      errors: response.body.result.errors || [],
       services: SERVICES,
       baselineStaticAssetsUrl: config.baselineStaticAssetsUrl,
       templates: TEMPLATES

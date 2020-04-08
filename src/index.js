@@ -6,7 +6,7 @@ import {baseline} from './util/baseline';
 import {clean} from './util/clean';
 import {runCredentialFlow} from './util/baseline-settings';
 import {initServer} from './util/server';
-import prompts from 'prompts';
+import {checkForNewVersion} from './util/check-version';
 import {exit} from './util/process';
 
 program
@@ -26,6 +26,7 @@ async function main() {
   const server = await initServer();
   const spinner = new ora({});
 
+  await checkForNewVersion();
   await runCredentialFlow();
   const {passphrase, privateKey, publicKey} = await runPublicPrivateKeyFlow();
 

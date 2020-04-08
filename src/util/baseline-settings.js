@@ -3,21 +3,24 @@ import prompts from 'prompts';
 import {createBaselineSettingsDirIfNotExists, getBaselinePath} from './baseline';
 import {existsSync, writeFileSync, readFileSync} from 'fs';
 
-import {post} from './request';
+import fetch from 'got';
 import {exit} from './process';
+import config from './config';
 
 async function credentialsExist() {
   return existsSync(path.join(getBaselinePath(), 'settings'));
 }
 
 async function isValidCredential(credential) {
-  const response = await post('/v1/auth/verify', {}, {
-    headers: {
-      'Authorization': `Bearer ${credential.trim()}`
-    }
-  });
-
-  return response.status === 200;
+  try {
+    const response = await fetch.post(`${config.baselineApiUrl}/v1/auth/verify`, {
+      headers: {
+        'Authorization': `Bearer ${credential.trim()}`
+      }
+    });
+    return response.statusCode === 200;
+  } catch(e) {}
+  return false
 }
 
 async function writeCredentialToDisk(credential) {

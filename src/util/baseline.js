@@ -4,7 +4,7 @@ import {existsSync, mkdirSync, writeFileSync} from 'fs';
 import {privateDecrypt} from 'crypto';
 import open from 'open';
 import chalk from 'chalk';
-import {post} from './request';
+import fetch from 'got';
 import config from './config';
 import {exitRequestInvite} from './process';
 import {SERVICES} from '../const/service';
@@ -24,6 +24,7 @@ import DETAILS_AWS from '../template/compiled/service-details-aws';
 import DETAILS_CLOUDFLARE from '../template/compiled/service-details-cloudflare';
 import DETAILS_GOOGLE from '../template/compiled/service-details-google';
 import DETAILS_WORDPRESS_SELFHOSTED from '../template/compiled/service-details-wordpress-selfhosted';
+import {getCredentials} from './baseline-settings';
 
 const TEMPLATES = {
   REPORT,
@@ -78,13 +79,16 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
   spinner.text = chalk.bold('Baselining services, please be patient.');
 
   serviceKeys = decryptServiceKeys(serviceKeys, privateKey, passphrase);
-  const response = await post(`/v1/baseline`, serviceKeys);
 
-  if (response.status === 401) {
-    eventBus.emit('baseline-fail');
-    spinner.fail(chalk.bold('Failed baselining your accounts.'));
-    return exitRequestInvite();
-  } else if (response.status === 200) {
+  try {
+    const response = await fetch.post(`${config.baselineApiUrl}/v1/baseline`, {
+      json: serviceKeys,
+      headers: {
+        Authorization: `Bearer ${getCredentials()}`
+      },
+      responseType: 'json'
+    });
+
     spinner.succeed(chalk.bold('Baselining complete. Opening results in your browser.'));
 
     const file = await REPORT({
@@ -113,9 +117,16 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
     });
 
     await open(report);
-  } else {
-    eventBus.emit('baseline-error');
-    spinner.fail(chalk.bold('Failed baselining your accounts.'));
+  } catch(error) {
+    console.log(error.response)
+    if (error.response && error.response.statusCode === 401) {
+      eventBus.emit('baseline-fail');
+      spinner.fail(chalk.bold('Failed baselining your accounts.'));
+      return exitRequestInvite();
+    } else {
+      eventBus.emit('baseline-error');
+      spinner.fail(chalk.bold('Failed baselining your accounts.'));
+    }
   }
 }
 

@@ -1,9 +1,11 @@
 import {getAvailablePort} from './port';
 import {Server} from './http';
-import {post} from './request';
-import {addCredentials, getServiceCredentials, writeServiceCredentialsToDisk} from './service-credentials';
+import fetch from 'got';
+import {getServiceCredentials, writeServiceCredentialsToDisk} from './service-credentials';
 import {getEventBus} from './event-bus';
 import {encryptValue, getKeys} from './keys';
+import {getCredentials} from './baseline-settings';
+import config from './config';
 
 const app = new Server();
 const eventBus = getEventBus();
@@ -41,31 +43,44 @@ app.post('/baseline', (ctx, res) => {
 });
 
 app.post('/baseline/credentials/encrypt', async (ctx, res) => {
-  const {status, body} = await post(`/v1/baseline/dryrun`, ctx.body);
+  let responseStatus, responseBody;
+  try {
+    const {statusCode, body} = await fetch.post(`${config.baselineApiUrl}/v1/baseline/dryrun`, {
+      json: ctx.body,
+      headers: {
+        Authorization: `Bearer ${getCredentials()}`
+      },
+      responseType: 'json'
+    });
 
-  if (body.status === 'error') {
-    res.status = status;
-    res.body = body;
-    return;
-  } else if (body.status === 'ok' && body.result.errors.length) {
-    res.status = 500;
-    res.body = body.result.errors;
-    return;
+    if (body.status === 'error') {
+      responseStatus = statusCode;
+      responseBody = body;
+    } else if (body.status === 'ok' && body.result.errors.length) {
+      responseStatus = 500;
+      responseBody = body.result.errors;
+    } else {
+      const {publicKey} = await getKeys();
+      const encryptedCredentials = ctx.body.map((service) => {
+        Object.keys(service.credentials).forEach(async (key) => {
+          service.credentials[key] = encryptValue(publicKey, service.credentials[key]);
+        });
+        return service;
+      });
+
+      responseStatus = statusCode;
+      responseBody = {
+        status: 'ok',
+        result: encryptedCredentials
+      };
+    }
+  } catch(e) {
+    responseStatus = 500;
+    responseBody = ['We were not able to encrypt your credentials'];
   }
 
-  const {publicKey} = await getKeys();
-  const encryptedCredentials = ctx.body.map((service) => {
-    Object.keys(service.credentials).forEach(async (key) => {
-      service.credentials[key] = encryptValue(publicKey, service.credentials[key]);
-    });
-    return service;
-  });
-
-  res.status = status;
-  res.body = {
-    status: 'ok',
-    result: encryptedCredentials
-  };
+  res.status = responseStatus;
+  res.body = responseBody;
 });
 
 app.get('/baseline/credentials', async (ctx, res) => {

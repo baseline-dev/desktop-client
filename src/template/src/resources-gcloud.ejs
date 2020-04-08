@@ -15,14 +15,14 @@
         </div>
     </div>
 
-            <% data.resources.forEach((resource) => { %>
-            <div>
-                <div class="flex items-center px-4 py-5 sm:px-6 bg-gray-100">
-                    <h2 class="text-lg leading-5 font-medium text-gray-700">
-                        <%= resource.projectName %>
-                    </h2>
-                </div>
-            </div>
+    <% data.resources.forEach((resource) => { %>
+    <div>
+        <div class="flex items-center px-4 py-5 sm:px-6 bg-gray-100">
+            <h2 class="text-lg leading-5 font-medium text-gray-700">
+                <%= resource.projectName %>
+            </h2>
+        </div>
+    </div>
     <div class="sm:mx-2 my-2">
         <table class="text-left w-full rounded-md">
             <thead>
@@ -47,6 +47,5 @@
                 <% }) %>
         </table>
     </div>
-
-            <% }); %>
+    <% }); %>
 </div>

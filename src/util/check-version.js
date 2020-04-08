@@ -2,7 +2,7 @@ import fetch from 'got';
 import config from './config';
 import semver from 'semver';
 
-const pjson = require('../../package.json');
+const VERSION = '0.0.45';
 
 async function checkForNewVersion() {
   try {
@@ -10,7 +10,7 @@ async function checkForNewVersion() {
       responseType: 'json'
     });
 
-    if (semver.gt(response.body.version, pjson.version)) {
+    if (semver.gt(response.body.version, VERSION)) {
       console.log(`\n  A new version of the Baseline CLI is available 🎉`);
       console.log(`  Please grab it at https://baseline.dev/download\n`);
       process.exit();

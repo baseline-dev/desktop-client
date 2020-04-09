@@ -38,6 +38,11 @@ const SERVICES = {
     name: 'wordpress-selfhosted',
     label: 'Wordpress Selfhosted',
     icon: 'wordpress.svg'
+  },
+  'intercom': {
+    name: 'intercom',
+    label: 'Intercom',
+    icon: 'intercom.svg'
   }
 };
 

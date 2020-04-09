@@ -18,7 +18,8 @@ const OUTPUT_PATH = './src/template/compiled';
   'service-details-slack',
   'service-details-cloudflare',
   'service-details-google',
-  'service-details-wordpress-selfhosted'
+  'service-details-wordpress-selfhosted',
+  'service-details-intercom'
 ].forEach((file) => {
   const compiledTemplate = template(readFileSync(`${TEMPLATE_PATH}/${file}.ejs`, 'utf8'), {
     variable: 'data'

@@ -24,6 +24,7 @@ import DETAILS_AWS from '../template/compiled/service-details-aws';
 import DETAILS_CLOUDFLARE from '../template/compiled/service-details-cloudflare';
 import DETAILS_GOOGLE from '../template/compiled/service-details-google';
 import DETAILS_WORDPRESS_SELFHOSTED from '../template/compiled/service-details-wordpress-selfhosted';
+import DETAILS_INTERCOM from '../template/compiled/service-details-intercom';
 import {getCredentials} from './baseline-settings';
 
 const TEMPLATES = {
@@ -40,7 +41,8 @@ const TEMPLATES = {
   DETAILS_AWS,
   DETAILS_CLOUDFLARE,
   DETAILS_GOOGLE,
-  DETAILS_WORDPRESS_SELFHOSTED
+  DETAILS_WORDPRESS_SELFHOSTED,
+  DETAILS_INTERCOM
 };
 
 const eventBus = getEventBus();
@@ -118,7 +120,6 @@ async function baseline(serviceKeys, privateKey, passphrase, spinner) {
 
     await open(report);
   } catch(error) {
-    console.log(error.response)
     if (error.response && error.response.statusCode === 401) {
       eventBus.emit('baseline-fail');
       spinner.fail(chalk.bold('Failed baselining your accounts.'));

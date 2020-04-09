@@ -1,8 +1,9 @@
-## v0.0.28
+## v0.0.47
 
-### Release management
+### Fixed
 
-* Getting GitHub actions to run
+* Remove request debugging.
+* Add support for Intercom baselining.
 
 ## v0.0.3
 

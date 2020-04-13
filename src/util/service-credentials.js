@@ -29,9 +29,10 @@ async function getServiceNamesFromCredentials() {
 
   try {
     credentials = JSON.parse(Buffer.from(credentials, 'base64').toString('ascii'));
-    serviceNames = credentials.map((service) => {
-      return SERVICES[service.name].label;
-    });
+    serviceNames = credentials.reduce((prev, service) => {
+      if (!SERVICES[service.name]) return prev;
+      return prev.concat(SERVICES[service.name].label);
+    }, []);
   } catch(e) {
     console.log('  Error parsing credentials');
   }
@@ -61,17 +62,6 @@ async function getServiceCredentials() {
   }
 
   return credentials;
-}
-
-function addCredentials(existingServices, newServiceCredentials) {
-  const index = existingServices.findIndex((service) => {
-    return service.service === newServiceCredentials.service && service.profileId === newServiceCredentials.profileId;
-  });
-
-  if (index < 0) existingServices.push(newServiceCredentials);
-  else existingServices[index] = newServiceCredentials;
-
-  return existingServices;
 }
 
 async function useExistingCredentials(serviceNames) {
@@ -146,6 +136,5 @@ async function runServiceCredentialFlow(publicKey, port, spinner) {
 export {
   runServiceCredentialFlow,
   getServiceCredentials,
-  writeServiceCredentialsToDisk,
-  addCredentials
+  writeServiceCredentialsToDisk
 };

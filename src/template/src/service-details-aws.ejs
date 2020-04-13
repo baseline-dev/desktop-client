@@ -3,21 +3,21 @@
         <thead>
         <tr>
             <th class="py-2 px-4 font-bold uppercase text-sm text-gray-600">
-                AWS Account Name
+                Account Name
             </th>
             <th class="py-2 px-4 font-bold uppercase text-sm text-gray-600">
-                Status
+                Account Status
             </th>
         </tr>
         </thead>
         <% data.serviceItems.forEach((item) => { %>
             <tr class="text-gray-800">
                 <td class="py-2 px-4">
-                    <%= item.organizationName %><br />
-                    <small class="text-sm text-gray-500"><%= item.organizationEmail %></small>
+                    <%= item.accountName %><br />
+                    <small class="text-sm text-gray-500"><%= item.accountEmail %></small>
                 </td>
                 <td class="py-2 px-4">
-                    <%= item.organizationStatus %>
+                    <%= item.accountStatus %>
                 </td>
             </tr>
         <% }); %>

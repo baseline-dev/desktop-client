@@ -19,7 +19,8 @@ const OUTPUT_PATH = './src/template/compiled';
   'service-details-cloudflare',
   'service-details-google',
   'service-details-wordpress-selfhosted',
-  'service-details-intercom'
+  'service-details-intercom',
+  'service-details-hubspot'
 ].forEach((file) => {
   const compiledTemplate = template(readFileSync(`${TEMPLATE_PATH}/${file}.ejs`, 'utf8'), {
     variable: 'data'

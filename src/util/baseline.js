@@ -25,6 +25,7 @@ import DETAILS_CLOUDFLARE from '../template/compiled/service-details-cloudflare'
 import DETAILS_GOOGLE from '../template/compiled/service-details-google';
 import DETAILS_WORDPRESS_SELFHOSTED from '../template/compiled/service-details-wordpress-selfhosted';
 import DETAILS_INTERCOM from '../template/compiled/service-details-intercom';
+import DETAILS_HUBSPOT from '../template/compiled/service-details-hubspot';
 import {getCredentials} from './baseline-settings';
 
 const TEMPLATES = {
@@ -42,7 +43,8 @@ const TEMPLATES = {
   DETAILS_CLOUDFLARE,
   DETAILS_GOOGLE,
   DETAILS_WORDPRESS_SELFHOSTED,
-  DETAILS_INTERCOM
+  DETAILS_INTERCOM,
+  DETAILS_HUBSPOT
 };
 
 const eventBus = getEventBus();

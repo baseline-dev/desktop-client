@@ -7,7 +7,7 @@ __p += '\n<div>\n    <div>\n        <div class="flex items-center px-4 py-5 sm:p
 ((__t = ( data.service.icon )) == null ? '' : __t) +
 '" width="20" alt="' +
 ((__t = ( data.service.label )) == null ? '' : __t) +
-'"/>\n            </div>\n            <h2 class="ml-1 text-lg leading-5 font-medium text-gray-700">\n                ' +
+'"/>\n            </div>\n            <h2 class="ml-1 my-0 text-lg leading-5 font-medium text-gray-700">\n                ' +
 ((__t = ( data.service.label )) == null ? '' : __t) +
 '\n            </h2>\n        </div>\n    </div>\n    ';
  if (data.service.name == 'github') { ;
@@ -55,6 +55,12 @@ __p += '\n    ';
  if (data.service.name == 'intercom') { ;
 __p += '\n        ' +
 ((__t = ( data.templates.DETAILS_INTERCOM({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) )) == null ? '' : __t) +
+'\n    ';
+ } ;
+__p += '\n    ';
+ if (data.service.name == 'hubspot') { ;
+__p += '\n        ' +
+((__t = ( data.templates.DETAILS_HUBSPOT({serviceItems: data.serviceItems, templates: data.templates, baselineStaticAssetsUrl: data.baselineStaticAssetsUrl}) )) == null ? '' : __t) +
 '\n    ';
  } ;
 __p += '\n</div>';

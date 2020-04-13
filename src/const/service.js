@@ -43,6 +43,11 @@ const SERVICES = {
     name: 'intercom',
     label: 'Intercom',
     icon: 'intercom.svg'
+  },
+  'hubspot': {
+    name: 'hubspot',
+    label: 'HubSpot',
+    icon: 'hubspot.svg'
   }
 };
 

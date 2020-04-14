@@ -39,7 +39,7 @@ async function runCredentialFlow() {
   let credentials;
   const hasCredentials = await credentialsExist();
   if (!hasCredentials) {
-    console.log(`\n  To use Baseline, you have gotten credentials.`);
+    console.log(`\n  To use Baseline, you have received credentials.`);
     ({credentials} = await prompts({
       type: 'text',
       name: 'credentials',

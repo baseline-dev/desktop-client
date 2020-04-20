@@ -1,7 +1,7 @@
 import {app, Menu, ipcMain, shell, BrowserWindow, protocol} from 'electron';
 import nunjucks from './lib/nunjucks';
 import path from 'path';
-import {autoUpdater} from "electron-updater";
+import {autoUpdater} from 'electron-updater';
 import {initServer} from './util/server';
 import log from 'electron-log';
 

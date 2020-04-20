@@ -1,7 +1,6 @@
 import {app, ipcMain} from 'electron';
 import Store from 'electron-store';
 import {generateKeyPair as cryptoGenerateKeyPair, createPrivateKey, publicEncrypt, privateDecrypt} from 'crypto';
-import {SERVICES} from '../const/service';
 
 const store = new Store();
 const STATE = {};
@@ -140,7 +139,7 @@ function decryptServiceKeys(serviceKeys) {
         }
       });
     } catch(e) {
-      console.error(`\n  Something went wrong baselining ${SERVICES[service.service].name}`);
+      console.error(`\n  Something went wrong baselining ${service.service}`);
     }
     return service;
   });

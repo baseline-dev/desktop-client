@@ -25,7 +25,7 @@ ipcMain.on('/service/credentials/manage', async () => {
     port: getPort()
   };
 
-  shell.openExternal(`http://localhost:8080/baseline/?${querystring.stringify(query)}`);
+  shell.openExternal(`${config.baselineUrl}/?${querystring.stringify(query)}`);
 });
 
 async function getServices() {

@@ -2,7 +2,10 @@
   "name": "baseline-cli",
   "version": "0.0.51",
   "description": "SaaS Access Auditing. Simple and Secure.",
+  "author": "Nikolai Onken",
   "productName": "Baseline",
+  "license": "Apache 2.0",
+  "repository": "https://github.com/baseline-dev/cli",
   "main": "index.js",
   "scripts": {
     "test": "npm run lint && npm run coverage",
@@ -13,12 +16,10 @@
     "build:css": "postcss src/static/css/style-source.css -c postcss.config.js -o ./src/static/css/style.css",
     "watch:css": "postcss src/static/css/style-source.css -c postcss.config.js -o ./src/static/css/style.css --watch",
     "start": "npm run watch:css & electron-forge start",
-    "package": "npm run build && electron-forge package",
+    "package": "npm run build && electron-builder build",
     "make": "npm run build && electron-forge make",
     "publish": "npm run build && electron-forge publish"
   },
-  "author": "Nikolai Onken",
-  "license": "Apache 2.0",
   "config": {
     "forge": {
       "packagerConfig": {
@@ -37,12 +38,47 @@
       ]
     }
   },
+  "build": {
+    "appId": "dev.baseline.app",
+    "files": [
+      "src/",
+      "node_modules/",
+      "index.js",
+      "config/",
+      "package.json",
+      "assets/icons.icns"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "icon": "assets/icons.icns",
+      "publish": [
+        "github"
+      ]
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 190,
+          "y": 324
+        },
+        {
+          "x": 450,
+          "y": 324,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    }
+  },
   "dependencies": {
     "@koa/cors": "^3.0.0",
     "@tailwindcss/ui": "^0.1.3",
     "electron-log": "^4.1.1",
-    "electron-nunjucks": "^1.0.3",
     "electron-store": "^5.1.1",
+    "electron-updater": "^4.2.5",
     "esm": "^3.2.25",
     "got": "^10.7.0",
     "koa": "^2.11.0",
@@ -50,6 +86,7 @@
     "koa-router": "^8.0.8",
     "koa-static": "^5.0.0",
     "lodash.merge": "^4.6.2",
+    "mime": "^2.4.4",
     "nunjucks": "^3.2.1",
     "portfinder": "^1.0.25"
   },
@@ -60,6 +97,7 @@
     "@fullhuman/postcss-purgecss": "^2.1.2",
     "autoprefixer": "^9.7.6",
     "electron": "^8.2.3",
+    "electron-builder": "^22.5.1",
     "node-env-file": "^0.1.8",
     "nyc": "^15.0.0",
     "postcss-cli": "^7.1.0",

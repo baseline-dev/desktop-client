@@ -1,8 +1,9 @@
-import {app, Menu, ipcMain, shell, BrowserWindow} from 'electron';
-import nunjucks from 'electron-nunjucks';
+import {app, Menu, ipcMain, shell, BrowserWindow, protocol} from 'electron';
+import nunjucks from './lib/nunjucks';
 import path from 'path';
-
+import {autoUpdater} from "electron-updater";
 import {initServer} from './util/server';
+import log from 'electron-log';
 
 require('./util/app');
 require('./util/service');
@@ -16,7 +17,7 @@ nunjucks.install(app, {
   }
 });
 
-app.once('ready', async function() {
+app.once('ready', async function () {
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 700,
@@ -33,6 +34,10 @@ app.once('ready', async function() {
   ipcMain.emit('navigate');
 
   await initServer();
+
+  autoUpdater.logger = log;
+  autoUpdater.logger.transports.file.level = 'info';
+  autoUpdater.checkForUpdatesAndNotify();
 
   if (!app.isPackaged) {
     mainWindow.webContents.openDevTools();

@@ -1,0 +1,44 @@
+<div class="fixed bottom-0 inset-x-0 px-4 pb-6 sm:inset-0 sm:p-0 sm:flex sm:items-center sm:justify-center">
+    <div class="fixed inset-0 transition-opacity">
+        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+    </div>
+    <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all">
+        <div class="border-b border-gray-200 px-4 py-4 sm:px-6">
+            <h3>Enter your passphrase</h3>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+            <div class="max-w-xl text-sm leading-5 text-gray-500">
+                <p>
+                    Please enter your passphrase so we can get started.<br/>
+                    The passphrase is used to protect your private key.
+                </p>
+            </div>
+            <form x-ref="form" action="#" x-on:submit="validatePassphrase($event)">
+                <div class="mt-2 sm:flex sm:items-start">
+                    <div>
+                        <label for="keyPairPassphrase" class="block mb-1 text-sm font-medium leading-5 text-gray-700 sr-only">Passphrase</label>
+                        <div class="relative rounded-md shadow-sm">
+                            <input id="keyPairPassphrase"
+                                   x-bind:class="{ 'border-red-300 text-red-900 placeholder-red-300': error }"
+                                   class="w-full form-input block w-full pr-10 focus:border-red-300 focus:shadow-outline-red sm:text-sm sm:leading-5"
+                                   placeholder="Your Passphrase" />
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" x-show="error">
+                                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-red-600" x-text="error"></p>
+                        <p class="mt-2 text-sm text-gray-500" x-show="!error">&nbsp;</p>
+                    </div>
+                    <span class="mt-3 inline-flex rounded-md shadow-sm sm:mt-0 sm:ml-3 sm:w-auto">
+                      <button type="submit"
+                              class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150 sm:w-auto sm:text-sm sm:leading-5">
+                        Continue
+                      </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

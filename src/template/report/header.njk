@@ -1,0 +1,14 @@
+<div class="border-b border-gray-200 mb-8">
+    <nav class="-mb-px flex">
+        {% if users | length %}
+        <a href="#" :class="{ 'border-pink-500 font-medium': tab === 'users' }" @click="tab = 'users'" class="whitespace-no-wrap py-4 px-1 border-b-2 border-transparent font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300">
+            Users
+        </a>
+        {% endif %}
+        {% if resources | length %}
+        <a href="#" :class="{ 'border-pink-500 font-medium': tab === 'resources' }" @click="tab = 'resources'" class="whitespace-no-wrap ml-8 py-4 px-1 border-b-2 border-transparent font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300">
+            Resources
+        </a>
+        {% endif %}
+    </nav>
+</div>

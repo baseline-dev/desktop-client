@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Baseline Report</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1">
+    <title>Baseline</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="/js/alpine.js"></script>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' 'unsafe-inline';" />
+</head>
+
+<body class="h-screen overflow-hidden flex" x-data="{tab: 'users'}">
+    <div class="w-full h-screen p-8 overflow-y-auto">
+        <h1 class="text-4xl font-bold mb-6">Baseline Auditing Result</h1>
+        {% include './header.njk' %}
+        <div class="grid gap-4 w-full">
+            {% include './service-errors.njk' %}
+            <div x-show="tab === 'users'">
+                <div class="grid gap-4 w-full">
+                    {% for user in users %}
+                        {% include './user-item.njk' %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div x-show="tab === 'resources'">
+                {% include './resources-container.njk' %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

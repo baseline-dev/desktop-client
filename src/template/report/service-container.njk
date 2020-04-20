@@ -1,0 +1,37 @@
+
+<div>
+    <div>
+        <div class="flex items-center px-4 py-5 sm:px-6 bg-gray-200">
+            <div class="rounded-full flex items-center justify-center text-gray-600">
+                <img src="{{ services[serviceKey].icon }}" width="20" alt="{{ services[serviceKey].label }}"/>
+            </div>
+            <h2 class="ml-1 my-0 text-lg leading-5 font-medium text-gray-700">
+                {{ services[serviceKey].label }}
+            </h2>
+        </div>
+    </div>
+    {% if serviceKey == 'github' %}
+    {% include './service-details-github.njk' %}
+    {% endif %}
+    {% if serviceKey == 'slack'  %}
+    {% include './service-details-slack.njk' %}
+    {% endif %}
+    {% if serviceKey == 'aws'  %}
+    {% include './service-details-aws.njk' %}
+    {% endif %}
+    {% if serviceKey == 'cloudflare'  %}
+    {% include './service-details-cloudflare.njk' %}
+    {% endif %}
+    {% if serviceKey == 'wordpress-selfhosted'  %}
+    {% include './service-details-wordpress-selfhosted.njk' %}
+    {% endif %}
+    {% if serviceKey == 'google-suite'  %}
+    {% include './service-details-google.njk' %}
+    {% endif %}
+    {% if serviceKey == 'intercom'  %}
+    {% include './service-details-intercom.njk' %}
+    {% endif %}
+    {% if serviceKey == 'hubspot'  %}
+    {% include './service-details-hubspot.njk' %}
+    {% endif %}
+</div>

@@ -1,140 +1,58 @@
-import path from 'path';
-import {homedir} from 'os';
-import {existsSync, mkdirSync, writeFileSync} from 'fs';
-import {privateDecrypt} from 'crypto';
-import open from 'open';
-import chalk from 'chalk';
+import {app, ipcMain} from 'electron';
+import Store from 'electron-store';
+import {mkdirSync, readdirSync, unlinkSync, writeFileSync} from 'fs';
 import fetch from 'got';
+import path from 'path';
 import config from './config';
-import {exitRequestInvite} from './process';
-import {SERVICES} from '../const/service';
-import {getEventBus} from './event-bus';
+import {getPort} from './server';
+import {decryptServiceKeys} from './keys';
 
-import REPORT from '../template/compiled/report';
-import HEADER from '../template/compiled/header';
-import USER_ITEM from '../template/compiled/user-item';
-import RESOURCES_CONTAINER from '../template/compiled/resources-container';
-import RESOURCES_AWS from '../template/compiled/resources-aws';
-import RESOURCES_GCLOUD from '../template/compiled/resources-gcloud';
-import SERVICE_CONTAINER from '../template/compiled/service-container';
-import SERVICE_ERRORS from '../template/compiled/service-errors';
-import DETAILS_GITHUB from '../template/compiled/service-details-github';
-import DETAILS_SLACK from '../template/compiled/service-details-slack';
-import DETAILS_AWS from '../template/compiled/service-details-aws';
-import DETAILS_CLOUDFLARE from '../template/compiled/service-details-cloudflare';
-import DETAILS_GOOGLE from '../template/compiled/service-details-google';
-import DETAILS_WORDPRESS_SELFHOSTED from '../template/compiled/service-details-wordpress-selfhosted';
-import DETAILS_INTERCOM from '../template/compiled/service-details-intercom';
-import DETAILS_HUBSPOT from '../template/compiled/service-details-hubspot';
-import {getCredentials} from './baseline-settings';
+const store = new Store();
 
-const TEMPLATES = {
-  REPORT,
-  HEADER,
-  USER_ITEM,
-  RESOURCES_CONTAINER,
-  RESOURCES_AWS,
-  RESOURCES_GCLOUD,
-  SERVICE_CONTAINER,
-  SERVICE_ERRORS,
-  DETAILS_GITHUB,
-  DETAILS_SLACK,
-  DETAILS_AWS,
-  DETAILS_CLOUDFLARE,
-  DETAILS_GOOGLE,
-  DETAILS_WORDPRESS_SELFHOSTED,
-  DETAILS_INTERCOM,
-  DETAILS_HUBSPOT
-};
-
-const eventBus = getEventBus();
-
-function getBaselinePath() {
-  return path.join(homedir(), '.baseline');
-}
-
-async function createBaselineSettingsDirIfNotExists() {
-  const baselinePath = getBaselinePath();
-  if (!existsSync(baselinePath)) {
-    await mkdirSync(baselinePath, {recursive: true});
+ipcMain.handle('/baseline/audits', async () => {
+  const dir = app.getPath('userData');
+  return {
+    status: 'ok',
+    result: readdirSync(path.resolve(path.join(dir, 'reports')))
   }
-  return baselinePath;
-}
+});
 
-function decryptServiceKeys(serviceKeys, privateKey, passphrase) {
-  return serviceKeys.map((service) => {
-    try {
-      Object.keys(service.credentials).forEach((key) => {
-        if (service.credentials[key]) {
-          service.credentials[key] = privateDecrypt({
-            key: privateKey,
-            passphrase: passphrase
-          }, Buffer.from(service.credentials[key], 'base64')).toString('utf8');
-        }
-      });
-    } catch(e) {
-      console.error(`\n  Something went wrong baselining ${SERVICES[service.service].name}`);
-    }
-    return service;
+ipcMain.on('/audit', async () => {
+  ipcMain.emit('navigate', null, '/audit/baselining');
+
+  const credentials = store.get('baselineCredentials');
+  const serviceKeys = decryptServiceKeys(credentials);
+
+  const response = await fetch.post(`${config.baselineApiUrl}/v1/baseline`, {
+    json: serviceKeys,
+    headers: {
+      Authorization: `Bearer ${store.get('baselineAccessKey')}`
+    },
+    responseType: 'json'
   });
-}
 
-async function baseline(serviceKeys, privateKey, passphrase, spinner) {
-  spinner.text = chalk.bold('Baselining services, please be patient.');
+  storeReport(response.body.result);
 
-  serviceKeys = decryptServiceKeys(serviceKeys, privateKey, passphrase);
+  ipcMain.emit('navigate', null, '/audit/view');
+});
 
-  try {
-    const response = await fetch.post(`${config.baselineApiUrl}/v1/baseline`, {
-      json: serviceKeys,
-      headers: {
-        Authorization: `Bearer ${getCredentials()}`
-      },
-      responseType: 'json'
-    });
+ipcMain.on('/baseline/audit/delete', async (event, audit) => {
+  const dir = app.getPath('userData');
+  unlinkSync(path.resolve(path.join(dir, 'reports', audit)));
+  ipcMain.emit('navigate', null, '/audits');
+});
 
-    spinner.succeed(chalk.bold('Baselining complete. Opening results in your browser.'));
 
-    const file = await REPORT({
-      users: response.body.result.users || [],
-      resources: response.body.result.resources.reduce((prev, next) => {
-        if (!prev[next.service]) {
-          prev[next.service] = [];
-        }
-        prev[next.service].push(next);
-        return prev;
-      }, {}),
-      errors: response.body.result.errors || [],
-      services: SERVICES,
-      baselineStaticAssetsUrl: config.baselineStaticAssetsUrl,
-      templates: TEMPLATES
-    });
-
-    const baselinePath = getBaselinePath();
-    const report = path.join(baselinePath, 'report', 'baseline.html');
-
-    mkdirSync(path.join(baselinePath, 'report'), {recursive: true});
-    writeFileSync(report, file);
-
-    eventBus.emit('baseline-success', {
-      reportLocation: report
-    });
-
-    await open(report);
-  } catch(error) {
-    if (error.response && error.response.statusCode === 401) {
-      eventBus.emit('baseline-fail');
-      spinner.fail(chalk.bold('Failed baselining your accounts.'));
-      return exitRequestInvite();
-    } else {
-      eventBus.emit('baseline-error');
-      spinner.fail(chalk.bold('Failed baselining your accounts.'));
-    }
+ipcMain.handle('/baseline/audit/url', async (event, report = '') => {
+  return {
+    status: 'ok',
+    result: `http://localhost:${getPort()}/baseline/report?report=${report}`
   }
-}
+});
 
-export {
-  createBaselineSettingsDirIfNotExists,
-  getBaselinePath,
-  baseline
-};
+function storeReport(report) {
+  const dir = app.getPath('userData');
+  const reportFileName = `${(new Date).toISOString()}.json`;
+  mkdirSync(path.join(dir, 'reports'), { recursive: true });
+  writeFileSync(path.join(dir, 'reports', reportFileName), JSON.stringify(report, null, 2));
+}

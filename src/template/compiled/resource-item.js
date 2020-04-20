@@ -1,6 +1,0 @@
-const template = function(data) {
-var __t, __p = '';
-__p += '<div class="bg-white overflow-hidden sm:rounded-lg sm:shadow sm:mb-4 sm:border-b sm:border-gray-200">\n    <div class="px-4 py-5 border-b border-gray-200 sm:px-6">\n        <div class="-ml-4 -mt-4 flex justify-between items-center flex-wrap sm:flex-no-wrap">\n            <div class="ml-4 mt-4">\n                <div class="flex items-center">\n                    <div class="flex-shrink-0">\n                        IMG\n                    </div>\n                    <div class="ml-4">\n                        <h3 class="text-lg leading-6 font-medium text-gray-900">\n                            NAME\n                        </h3>\n                        <p class="text-sm leading-5 text-gray-500">\n                            <a href="#">\n                                EMAIL\n                            </a>\n                        </p>\n                    </div>\n                </div>\n            </div>\n            <div class="ml-4 mt-4 flex-shrink-0 flex">\n            </div>\n        </div>\n    </div>\n    <div>\n    </div>\n</div>';
-return __p
-};
-export {template as default}

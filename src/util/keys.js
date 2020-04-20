@@ -1,19 +1,76 @@
-import ora from 'ora';
-import path from 'path';
-import prompts from 'prompts';
-import chalk from 'chalk';
-import {existsSync, writeFileSync, readFileSync} from 'fs';
-import {generateKeyPair as cryptoGenerateKeyPair, createPrivateKey, publicEncrypt} from 'crypto';
+import {app, ipcMain} from 'electron';
+import Store from 'electron-store';
+import {generateKeyPair as cryptoGenerateKeyPair, createPrivateKey, publicEncrypt, privateDecrypt} from 'crypto';
+import {SERVICES} from '../const/service';
 
-import {exit} from './process';
-import {createBaselineSettingsDirIfNotExists, getBaselinePath} from './baseline';
+const store = new Store();
+const STATE = {};
 
-async function keysExist() {
-  const baselinePath = getBaselinePath();
-  return existsSync(path.join(baselinePath, 'id_rsa.pub')) && existsSync(path.join(baselinePath, 'id_rsa'));
-}
+ipcMain.handle('/account/enter-passphrase', async (event, passphrase) => {
+  const isValid = await isValidPassphrase(passphrase);
 
-function isValidPassphrase(privateKey, passphrase) {
+  if (!isValid) {
+    return {
+      status: 'error',
+      message: 'The passphrase you provided is not valid.'
+    };
+  }
+
+  STATE.passphrase = passphrase;
+
+  return {
+    status: 'ok'
+  };
+});
+
+ipcMain.handle('/setup/create-key-pair', async (event, passphrase) => {
+  if (passphrase.length < 4) {
+    return {
+      status: 'error',
+      message: 'Please provide a passphrase with at least 4 characters.'
+    };
+  }
+
+  const {privateKey, publicKey} = await generateKeyPair(passphrase);
+
+  STATE.passphrase = passphrase;
+  store.set('baselineKeyPair', {
+    publicKey,
+    privateKey
+  });
+
+  return {
+    status: 'ok'
+  }
+});
+
+ipcMain.handle('/account/key-pair/delete', async () => {
+  deleteKeys();
+});
+
+app.createKeyPair = async function(passphrase) {
+  STATE.passphrase = passphrase;
+
+  if (passphrase.length < 4) {
+    return {
+      status: 'error',
+      message: 'Please provide a passphrase with at least 4 characters.'
+    };
+  }
+
+  const {privateKey, publicKey} = await generateKeyPair(passphrase);
+  store.set('baselineKeyPair', {
+    publicKey,
+    privateKey
+  });
+
+  return {
+    status: 'ok'
+  }
+};
+
+function isValidPassphrase(passphrase) {
+  const {privateKey} = store.get('baselineKeyPair');
   let isValid = false;
   try {
     createPrivateKey({
@@ -29,37 +86,13 @@ function isValidPassphrase(privateKey, passphrase) {
   return isValid;
 }
 
-async function saveKeys(publicKey, privateKey) {
-  const baselinePath = getBaselinePath();
-
-  await createBaselineSettingsDirIfNotExists();
-
-  await writeFileSync(path.join(baselinePath, 'id_rsa.pub'), publicKey);
-  await writeFileSync(path.join(baselinePath, 'id_rsa'), privateKey);
-}
-
-async function getKeys() {
-  const baselinePath = getBaselinePath();
-
-  const publicKey = await readFileSync(path.join(baselinePath, 'id_rsa.pub')).toString('ascii');
-  const privateKey = await readFileSync(path.join(baselinePath, 'id_rsa')).toString('ascii');
-
-  return {privateKey, publicKey};
-}
-
 function encryptValue(key, value) {
-  const baselinePath = getBaselinePath();
   return publicEncrypt(key, Buffer.from(value)).toString('base64');
 }
 
 async function generateKeyPair(passphrase) {
   return await (new Promise((resolve, reject) => {
-    if (!passphrase) exit();
-
-    let spinner = ora({
-      text: chalk.bold('Generating public/private key pair.'),
-      color: 'white'
-    }).start();
+    if (!passphrase) reject('Passphrase is required');
 
     cryptoGenerateKeyPair('rsa', {
       modulusLength: 4096,
@@ -75,82 +108,56 @@ async function generateKeyPair(passphrase) {
       }
     }, async (err, publicKey, privateKey) => {
       if (err) {
-        spinner.fail('Public/private key pair generation failed.');
         return reject(err);
       }
-
-      spinner.text = 'Saving public/private key pair to disk.';
-
-      await saveKeys(publicKey, privateKey);
-
-      spinner.succeed('Public/private key pair saved to disk.');
 
       resolve({publicKey, privateKey, passphrase});
     });
   }));
 }
 
-async function useExistingKeys() {
-  const {useExistingKeys} = await prompts({
-    type: 'confirm',
-    name: 'useExistingKeys',
-    message: 'You have previously used baseline and a public/private key was found. Would you like to use the keys stored on disk?',
-    initial: true
-  });
-
-  if (typeof useExistingKeys === 'undefined') exit();
-
-  return useExistingKeys;
+async function hasKeyPair() {
+  const keyPair = store.get('baselineKeyPair');
+  return keyPair && keyPair.privateKey && keyPair.publicKey;
 }
 
-async function runPublicPrivateKeyFlow() {
-  let passphrase, privateKey, publicKey;
-  const baselineKeysExist = await keysExist();
+async function providedValidPassphrase() {
+  return isValidPassphrase(STATE.passphrase);
+}
 
-  if (!baselineKeysExist) {
-    console.log(`\n  To keep things secure, we neet to setup a private key for you.`);
-    ({passphrase} = await prompts({
-      type: 'password',
-      name: 'passphrase',
-      message: 'Please enter a passphrase to encrypt the service access keys.',
-      validate: function(value) {
-        const isValid = value.length > 3;
+function decryptServiceKeys(serviceKeys) {
+  const {privateKey} = store.get('baselineKeyPair');
 
-        if (isValid) return true;
+  const passphrase = STATE.passphrase;
+  return serviceKeys.map((service) => {
+    try {
+      Object.keys(service.credentials).forEach((key) => {
+        if (service.credentials[key]) {
+          service.credentials[key] = privateDecrypt({
+            key: privateKey,
+            passphrase: passphrase
+          }, Buffer.from(service.credentials[key], 'base64')).toString('utf8');
+        }
+      });
+    } catch(e) {
+      console.error(`\n  Something went wrong baselining ${SERVICES[service.service].name}`);
+    }
+    return service;
+  });
+}
 
-        this.reset();
-        return  `Please enter at least 4 characters`;
-      }
-    }));
-
-    ({privateKey, publicKey} = await generateKeyPair(passphrase));
-  } else {
-    console.log(`\n  Since you already have baselined before, we can dive right in.`);
-
-    ({privateKey, publicKey} = await getKeys());
-
-    ({passphrase} = await prompts({
-      type: 'password',
-      name: 'passphrase',
-      message: 'Please enter the passphrase to decrypt the service access keys.',
-      validate: function(value) {
-        const isValid = isValidPassphrase(privateKey, value);
-
-        if (isValid) return true;
-
-        this.reset();
-        return 'Please enter the correct passphrase.'
-      }
-    }));
-
-    if (!passphrase) exit();
-  }
-
-  return {passphrase, privateKey, publicKey};
+function deleteKeys() {
+  store.delete('baselineKeyPair');
+  store.delete('baselineCredentials');
+  ipcMain.emit('navigate');
 }
 
 export {
-  runPublicPrivateKeyFlow,
   encryptValue,
-  getKeys
+  generateKeyPair,
+  isValidPassphrase,
+  hasKeyPair,
+  providedValidPassphrase,
+  decryptServiceKeys,
+  deleteKeys
 };

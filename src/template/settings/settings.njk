@@ -1,0 +1,36 @@
+<div class="w-full h-screen p-8 overflow-y-auto">
+    <h1 class="text-4xl font-bold mb-6">Settings</h1>
+    <p class="mb-6 leading-5">
+        Update your Baseline settings here.
+    </p>
+    <h2 class="text-1xl font-bold mb-4">Baseline Access Key</h2>
+    <p class="mb-2 leading-5">
+        This key is used so that you can communicate with the Baseline API.
+    </p>
+    <div class="mb-6">
+        <button x-on:click="deleteAccessKey()" type="button"
+                class="px-4 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-gray-600 hover:bg-gray-500 focus:outline-none focus:shadow-outline-gray focus:border-gray-700 active:bg-gray-700 transition duration-150 ease-in-out">
+            Delete Access Key
+        </button>
+    </div>
+    <h2 class="text-1xl font-bold mb-4">Public / Private Keypair</h2>
+    <p class="mb-2 leading-5">
+        The keypair is used to encrypt your service credentials.
+    </p>
+    <div class="mb-6">
+        <button x-on:click="deleteKeyPair()" type="button"
+                class="px-4 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-gray-600 hover:bg-gray-500 focus:outline-none focus:shadow-outline-gray focus:border-gray-700 active:bg-gray-700 transition duration-150 ease-in-out">
+            Public / Private Keypair
+        </button>
+    </div>
+    <h2 class="text-1xl font-bold mb-4">Baseline Logs</h2>
+    <p class="mb-2 leading-5">
+        For debugging services you can dive into application logs.
+    </p>
+    <div class="mb-6">
+        <button x-on:click="openLogs()" type="button"
+                class="px-4 py-1 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-gray-600 hover:bg-gray-500 focus:outline-none focus:shadow-outline-gray focus:border-gray-700 active:bg-gray-700 transition duration-150 ease-in-out">
+            View Logs
+        </button>
+    </div>
+</div>

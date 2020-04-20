@@ -18,25 +18,7 @@
     "start": "npm run watch:css & electron-forge start",
     "package": "npm run build && electron-builder build",
     "make": "npm run build && electron-forge make",
-    "publish": "npm run build && electron-forge publish"
-  },
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "icon": "assets/AppIcon.icns",
-        "prune": true
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-dmg",
-          "config": {
-            "icon": "assets/AppIcon.icns",
-            "background": "./assets/background-dmg.png",
-            "format": "ULFO"
-          }
-        }
-      ]
-    }
+    "release": "npm run build && electron-builder"
   },
   "build": {
     "appId": "dev.baseline.app",
@@ -54,9 +36,11 @@
     "mac": {
       "category": "public.app-category.utilities",
       "icon": "assets/icons.icns",
-      "publish": [
-        "github"
-      ]
+      "publish":  {
+        "provider":"github",
+        "owner":"baseline-dev",
+        "repo":"cli"
+      }
     },
     "dmg": {
       "contents": [

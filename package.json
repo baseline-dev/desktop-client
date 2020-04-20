@@ -1,6 +1,6 @@
 {
   "name": "baseline-cli",
-  "version": "0.0.52",
+  "version": "0.0.53",
   "description": "SaaS Access Auditing. Simple and Secure.",
   "author": "Nikolai Onken",
   "productName": "Baseline",
@@ -47,15 +47,18 @@
       }
     },
     "dmg": {
-      "contents": [{
-        "x": 190,
-        "y": 324
-      }, {
-        "x": 450,
-        "y": 324,
-        "type": "link",
-        "path": "/Applications"
-      }]
+      "contents": [
+        {
+          "x": 190,
+          "y": 324
+        },
+        {
+          "x": 450,
+          "y": 324,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
     },
     "afterSign": "scripts/notarize.js"
   },

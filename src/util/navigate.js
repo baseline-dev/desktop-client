@@ -69,20 +69,19 @@ function renderTemplate(route, forceReload) {
   const parsed = url.parse(STATE.currentRoute);
   const template = ROUTES[parsed.pathname].template;
 
+  const mainWindow = getMainWindow();
   if (template === STATE.currentTemplate && !forceReload) {
-    getMainWindow().webContents.send('navigate', STATE.currentRoute);
+    mainWindow.webContents.send('navigate', STATE.currentRoute);
   } else {
-    const mainWindow = getMainWindow();
     STATE.currentTemplate = template;
     mainWindow.loadURL(url.format({
       pathname: path.join(__dirname, '..', 'template', template),
       protocol: 'file:',
       slashes: true
     }));
-
     mainWindow.once('ready-to-show', async () => {
       mainWindow.show();
-      getMainWindow().webContents.send('navigate', STATE.currentRoute);
+      mainWindow.webContents.send('navigate', STATE.currentRoute);
     });
   }
 

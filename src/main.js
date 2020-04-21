@@ -17,7 +17,7 @@ nunjucks.install(app, {
   }
 });
 
-app.once('ready', async function () {
+function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 700,
@@ -31,17 +31,20 @@ app.once('ready', async function () {
     }
   });
 
-  ipcMain.emit('navigate');
+  ipcMain.emit('navigate', null, null, true);
 
+  if (!app.isPackaged) {
+    mainWindow.webContents.openDevTools();
+  }
+}
+
+app.once('ready', async function () {
+  createWindow();
   await initServer();
 
   autoUpdater.logger = log;
   autoUpdater.logger.transports.file.level = 'info';
   autoUpdater.checkForUpdatesAndNotify();
-
-  if (!app.isPackaged) {
-    mainWindow.webContents.openDevTools();
-  }
 });
 
 app.on('window-all-closed', function () {

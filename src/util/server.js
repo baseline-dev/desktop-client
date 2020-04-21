@@ -159,7 +159,7 @@ app.use(router.routes());
 let port;
 async function initServer() {
   port = await getAvailablePort();
-  http.createServer(appCallback).listen(port, () => console.log(`App listening on http port ${port}....`));
+  http.createServer(appCallback).listen(port, () => log.info(`Baseline service listening on http port ${port}....`));
   app.port = port;
   return app;
 }

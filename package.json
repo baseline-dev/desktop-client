@@ -12,12 +12,10 @@
     "test:unit": "tape --require esm test/*.js test/**/*.js | tap-spec",
     "lint": "echo \"No linting configured\"",
     "coverage": "nyc --require esm --reporter=lcov --reporter=text-summary npm run test:unit",
-    "build": "npm run build:css",
     "build:css": "postcss src/static/css/style-source.css -c postcss.config.js -o ./src/static/css/style.css",
     "watch:css": "postcss src/static/css/style-source.css -c postcss.config.js -o ./src/static/css/style.css --watch",
-    "start": "npm run watch:css & electron-forge start",
-    "package": "npm run build && electron-builder build",
-    "make": "npm run build && electron-forge make",
+    "start": "npm run watch:css & electron .",
+    "build": "npm run build:css && electron-builder build",
     "release": "npm run build && electron-builder"
   },
   "build": {

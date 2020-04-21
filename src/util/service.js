@@ -36,9 +36,11 @@ async function getServices() {
     responseType: 'json'
   });
 
-  if (response.statusCode !== 200) return {
-    status: 'error'
-  };
+  if (response.statusCode !== 200) {
+    return {
+      status: 'error'
+    };
+  }
 
   return {
     status: 'ok',

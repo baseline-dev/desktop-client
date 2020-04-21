@@ -16,7 +16,7 @@
     "watch:css": "postcss src/static/css/style-source.css -c postcss.config.js -o ./src/static/css/style.css --watch",
     "start": "npm run watch:css & electron .",
     "build": "npm run build:css && electron-builder build",
-    "release": "npm run build && electron-builder"
+    "release": "npm run build:css && electron-builder"
   },
   "build": {
     "appId": "dev.baseline.app",

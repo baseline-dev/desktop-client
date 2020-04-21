@@ -192,5 +192,8 @@ function init() {
         this.reportUrl = response.result;
       }
     },
+    openAudits: async function() {
+      await ipcRenderer.invoke('/baseline/audits/open');
+    }
   }
 }

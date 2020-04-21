@@ -24,7 +24,7 @@
     <div x-show="hasAudits() && !isLoadingAudits">
         <select x-ref="audits" class="mt-1 block form-select w-full py-2 px-3 py-0 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
             <template x-for="(audit, index) in audits" :key="index">
-                <option x-text="(new Date(audit.split('.')[0])).toLocaleString()" x-bind:value="audit"></option>
+                <option x-text="audit" x-bind:value="audit"></option>
             </template>
         </select>
 

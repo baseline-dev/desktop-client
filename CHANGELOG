@@ -4,6 +4,7 @@
 
 * We moved the Baseline CLI to a beautiful app 🎉.
 * Supported services are consumed from the API.
+* Electron app supports auto updating.
 
 ## v0.0.48
 

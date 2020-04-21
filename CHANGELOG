@@ -6,6 +6,13 @@
 * Supported services are consumed from the API.
 * Electron app supports auto updating.
 
+## v0.0.58
+
+### New
+
+* Store reports as HTML and JSON.
+  This way they will always work, even when we update the API.
+
 ## v0.0.48
 
 ### New

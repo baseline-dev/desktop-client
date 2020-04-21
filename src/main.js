@@ -1,4 +1,4 @@
-import {app, Menu, ipcMain, shell, BrowserWindow, protocol} from 'electron';
+import {app, ipcMain, BrowserWindow} from 'electron';
 import nunjucks from './lib/nunjucks';
 import path from 'path';
 import {autoUpdater} from 'electron-updater';

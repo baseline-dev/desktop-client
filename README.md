@@ -1,6 +1,11 @@
-# Baseline CLI
+# Baseline App
 
-Welcome to the repository for the Baseline CLI.
+Welcome to the repository for the Baseline App.
+The Baseline app is an [Electron based](https://github.com/electron/electron) application.
+
+## Supported Operating Systems
+
+* MacOS (darwin)
 
 ## Download
 
@@ -10,8 +15,6 @@ Please head over to https://baseline.dev/download to download the latest release
 
 If you don't yet have access to Baseline, please head over to https://baseline.dev and request an invite.
 
-## Running the CLI
+## Running the application
 
-After the download, unzip the file into a folder of your choice.
-When you launch the CLI for the first time, you need to allow MacOS to launch the binary.
-To do this, head over to Security & Privacy in the MacOS System Preferences and Allow the execution of the Baseline CLI. You only need to do this one.
+Simply download the application and move it to your applications folder.

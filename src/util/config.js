@@ -1,8 +1,9 @@
+import {app} from 'electron';
 import productionConfig from '../../config/production';
 import developmentConfig from '../../config/development';
 
 let config;
-if (process.pkg) config = productionConfig;
+if (app.isPackaged) config = productionConfig;
 else config = developmentConfig;
 
 export {

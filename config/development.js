@@ -1,6 +1,6 @@
 const config = {
   service: {
-    allowOrigin: 'http://localhost:8080'
+    allowOrigin: ['http://localhost:8080']
   },
   baselineUrl: 'http://localhost:8080/baseline',
   baselineStaticAssetsUrl: 'http://localhost:8080',

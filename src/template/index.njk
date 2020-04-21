@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="Description" content="SaaS Access Auditing, Simple and Secure. Easily audit who in your organization has access to SaaS services you are using to run your business.">
+    {% include './includes/head.njk' %}
+</head>
+
+<body x-data="init()" x-init="init" class="h-screen overflow-hidden flex">
+    {% include './includes/header.njk' %}
+    <div class="h-full w-full shadow z-10">
+        <template x-if="route === '/setup/baseline-access-key'">
+          {% include './setup/baselineAccessKey.njk' %}
+        </template>
+
+        <template x-if="route === '/setup/create-key-pair'">
+          {% include './setup/createKeyPair.njk' %}
+        </template>
+
+        <template x-if="route === '/account/enter-passphrase'">
+          {% include './setup/enterKeyPairPassphrase.njk' %}
+        </template>
+
+        <template x-if="route === '/services'">
+            {% include './services/services.njk' %}
+        </template>
+
+        <template x-if="route === '/audits'">
+            {% include './audits/audits.njk' %}
+        </template>
+
+        <template x-if="route === '/audit/new'">
+            {% include './audits/new.njk' %}
+        </template>
+
+        <template x-if="route === '/audit/baselining'">
+          {% include './audits/baselining.njk' %}
+        </template>
+
+        <template x-if="route === '/settings'">
+            {% include './settings/settings.njk' %}
+        </template>
+
+        <template x-if="route.indexOf('/audit/view') === 0">
+            {% include './report/container.njk' %}
+        </template>
+    </div>
+
+</body>
+{% include './includes/analytics.njk' %}
+</html>

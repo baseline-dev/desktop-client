@@ -1,0 +1,10 @@
+<div class="grid gap-4 w-full">
+    {% for service, serviceResources in resources %}
+        {% if service == 'aws' %}
+            {% include './resources-aws.njk' %}
+        {% endif %}
+        {% if service == 'google' %}
+            {% include './resources-gcloud.njk' %}
+        {% endif %}
+    {% endfor %}
+</div>

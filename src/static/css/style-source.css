@@ -1,0 +1,55 @@
+/* purgecss start ignore */
+@tailwind base;
+@tailwind components;
+/* purgecss end ignore */
+@tailwind utilities;
+
+h1 {
+    @apply text-3xl;
+    @apply leading-8;
+    @apply font-extrabold;
+    @apply tracking-tight;
+    @apply text-gray-800;
+}
+
+h2 {
+    @apply text-2xl;
+    @apply leading-8;
+    @apply font-extrabold;
+    @apply tracking-tight;
+    @apply text-gray-800;
+}
+
+h3 {
+    @apply text-xl;
+    @apply leading-8;
+    @apply font-extrabold;
+    @apply tracking-tight;
+    @apply text-gray-800;
+}
+
+h4 {
+    @apply text-lg;
+    @apply leading-8;
+    @apply font-extrabold;
+    @apply tracking-tight;
+    @apply text-gray-800;
+}
+
+p {
+
+}
+
+@-webkit-keyframes infiniteRotate {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes infinite-rotate {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+.rotate {
+    -webkit-animation: infiniteRotate 2s linear infinite; /* Safari */
+    animation: infiniteRotate 2s linear infinite;
+}

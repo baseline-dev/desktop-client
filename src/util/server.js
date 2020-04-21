@@ -1,54 +1,57 @@
-import {getAvailablePort} from './port';
-import {Server} from './http';
 import fetch from 'got';
-import {getServiceCredentials, writeServiceCredentialsToDisk} from './service-credentials';
-import {getEventBus} from './event-bus';
-import {encryptValue, getKeys} from './keys';
-import {getCredentials} from './baseline-settings';
+import koaStatic from 'koa-static';
+import Koa from 'koa';
+import Router from 'koa-router';
+import {app as electronApp, ipcMain} from 'electron';
+import Store from 'electron-store';
+import path from 'path';
+import {readdirSync, statSync, readFileSync} from 'fs';
+import nunjucks from 'nunjucks';
+import http from "http";
+import cors from '@koa/cors';
+import bodyParser from 'koa-bodyparser';
+import log from 'electron-log';
+
+import {encryptValue} from './keys';
 import config from './config';
+import {getAvailablePort} from './port';
+import {getServices} from './service';
 
-const app = new Server();
-const eventBus = getEventBus();
 
-app.post('/baseline', (ctx, res) => {
-  return new Promise((resolve, reject) => {
-    writeServiceCredentialsToDisk(ctx.body)
-      .then(() => {
-        eventBus.emit('received-service-credentials', ctx.body);
-      })
-      .catch(reject);
+const app = new Koa();
+const appCallback = app.callback();
 
-    eventBus.on('baseline-fail', () => {
-      res.status = 500;
-      res.body = {
-        status: 'error',
-        message: 'Baselining failed.'
-      };
-      resolve();
-    });
+const store = new Store();
+const STATIC_PATH = path.join(__dirname, '..', 'static');
 
-    eventBus.on('baseline-success', (args) => {
-      res.status = 200;
-      res.body = {
-        status: 'ok',
-        message: 'Baselining succeeded.',
-        result: {
-          reportLocation: args.reportLocation
-        }
-      };
-      resolve();
-    });
-  });
+app.use(koaStatic(STATIC_PATH));
+app.use(bodyParser());
 
+const router = new Router();
+
+app.use(cors({
+  origin: (ctx) => {
+    const cors = config.service.allowOrigin;
+    if (cors.indexOf(ctx.request.header.origin) < 0) return;
+    return ctx.request.header.origin;
+  }
+}));
+
+router.post('/baseline', async (ctx, res) => {
+  store.set('baselineCredentials', ctx.request.body);
+  ipcMain.emit('navigate', null, '/services');
+  ctx.body = {
+    status: 'ok'
+  };
 });
 
-app.post('/baseline/credentials/encrypt', async (ctx, res) => {
+router.post('/baseline/credentials/encrypt', async (ctx, res) => {
   let responseStatus, responseBody;
   try {
     const {statusCode, body} = await fetch.post(`${config.baselineApiUrl}/v1/baseline/dryrun`, {
       json: ctx.body,
       headers: {
-        Authorization: `Bearer ${getCredentials()}`
+        Authorization: `Bearer ${store.get('baselineAccessKey')}`
       },
       responseType: 'json'
     });
@@ -60,7 +63,7 @@ app.post('/baseline/credentials/encrypt', async (ctx, res) => {
       responseStatus = 500;
       responseBody = body.result.errors;
     } else {
-      const {publicKey} = await getKeys();
+      const {publicKey} = store.get('baselineKeyPair');
       const encryptedCredentials = ctx.body.map((service) => {
         Object.keys(service.credentials).forEach(async (key) => {
           service.credentials[key] = encryptValue(publicKey, service.credentials[key]);
@@ -83,19 +86,89 @@ app.post('/baseline/credentials/encrypt', async (ctx, res) => {
   res.body = responseBody;
 });
 
-app.get('/baseline/credentials', async (ctx, res) => {
-  const credentials = await getServiceCredentials();
-  res.status = 200;
-  res.body = {
+router.get('/baseline/credentials', async (ctx, res) => {
+  const credentials = store.get('baselineCredentials');
+  ctx.body = {
     status: 'ok',
     result: credentials || []
   };
 });
 
+function getMostRecentReport(dir) {
+  return new Promise((resolve, reject) => {
+    dir = path.resolve(dir);
+    const files = readdirSync(dir);
+
+    const sorted = files.map(function(v) {
+      const filepath = path.resolve(dir, v);
+      return {
+        name: v,
+        time: statSync(filepath).ctime.getTime()
+      };
+    })
+      .sort(function(a, b) { return b.time - a.time; })
+      .map(function(v) { return v.name; });
+
+    if (sorted.length > 0) {
+      resolve(sorted[0]);
+    } else {
+      reject('There are no Baseline reports');
+    }
+
+  });
+}
+
+router.get('/baseline/report', async (ctx, res) => {
+  try {
+    let file;
+    const dir = electronApp.getPath('userData');
+
+    if (!ctx.request.query.report || !ctx.request.query.report.length) {
+      file = await getMostRecentReport(path.join(dir, 'reports'));
+    } else {
+      file = ctx.request.query.report;
+    }
+
+    const report = JSON.parse(readFileSync(path.join(dir, 'reports', file), 'utf-8'));
+    const services = await getServices();
+
+    ctx.body = nunjucks.render(path.join(__dirname, '..', 'template', 'report', 'report.njk'), {
+      users: report.users || [],
+      resources: report.resources.reduce((prev, next) => {
+        if (!prev[next.service]) {
+          prev[next.service] = [];
+        }
+        prev[next.service].push(next);
+        return prev;
+      }, {}),
+      errors: report.errors || [],
+      services: services.result.reduce((prev, service) => {
+        prev[service.name] = service;
+        return prev;
+      }, {})
+    });
+  } catch(e) {
+    log.error(e);
+    ctx.status = 500;
+    ctx.body = e;
+  }
+});
+
+app.use(router.routes());
+
+let port;
 async function initServer() {
-  const port = await getAvailablePort();
-  app.listen(port);
+  port = await getAvailablePort();
+  http.createServer(appCallback).listen(port, () => log.info(`Baseline service listening on http port ${port}....`));
+  app.port = port;
   return app;
 }
 
-export {initServer}
+function getPort() {
+  return port;
+}
+
+export {
+  initServer,
+  getPort
+}

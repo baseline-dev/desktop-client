@@ -14,7 +14,7 @@
                 <div :class="{'shadow-outline-green bg-green-100':hasAuthorizedService(service.name)}"
                         class="bg-gray-100 overflow-hidden shadow-sm rounded-md h-full">
                     <div class="relative flex items-center p-2 h-16">
-                        <a x-bind:href="service.docs" class="top-2 right-2 absolute text-gray-500" target="_blank">
+                        <a x-bind:href="service.docs" @click.prevent="openExternalBrowser(service.docs)" class="top-2 right-2 absolute text-gray-500" target="_blank">
                             <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="18px"
                                  height="18px">
                                 <path d="M15,3C8.373,3,3,8.373,3,15c0,6.627,5.373,12,12,12s12-5.373,12-12C27,8.373,21.627,3,15,3z M15,22.5 c-0.828,0-1.5-0.672-1.5-1.5s0.672-1.5,1.5-1.5s1.5,0.672,1.5,1.5S15.828,22.5,15,22.5z M17.068,15.5C16.406,16.111,16,16.512,16,17 h-2c0-1.389,0.949-2.265,1.711-2.97C16.51,13.292,17,12.799,17,12c0-1.103-0.897-2-2-2s-2,0.897-2,2h-2c0-2.206,1.794-4,4-4 s4,1.794,4,4C19,13.715,17.929,14.704,17.068,15.5z"/>

@@ -95,6 +95,9 @@ function init() {
     openLogs: async function() {
       await ipcRenderer.invoke('/app/logs/open');
     },
+    openExternalBrowser(link) {
+      remote.shell.openExternal(link);
+    },
     // Services
     getCredentials: async function() {
       const result = await ipcRenderer.invoke('/service/credentials');

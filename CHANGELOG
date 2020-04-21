@@ -6,6 +6,12 @@
 * Supported services are consumed from the API.
 * Electron app supports auto updating.
 
+## v0.0.59
+
+### Fixes
+
+* Fixed issue where you can't open a new Baseline window after all windows were closed.
+
 ## v0.0.58
 
 ### New

@@ -20,7 +20,7 @@ nunjucks.install(app, {
 function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 900,
-    height: 700,
+    height: 600,
     minHeight: 300,
     minWidth: 500,
     useContentWidth: true,

@@ -9,6 +9,7 @@ require('./util/app');
 require('./util/service');
 require('./util/baseline');
 require('./util/navigate');
+require('./util/security');
 
 nunjucks.install(app, {
   path: './template/',
@@ -27,6 +28,7 @@ function createWindow() {
     titleBarStyle: 'hiddenInset',
     show: false,
     webPreferences: {
+      webviewTag: true,
       nodeIntegration: true
     }
   });

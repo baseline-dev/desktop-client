@@ -19,8 +19,6 @@ ipcMain.handle('/app/logs/open', (event, status) => {
   shell.openItem(app.getPath('logs'));
 });
 
-
-
 function getMainWindow() {
   const windows = BrowserWindow.getAllWindows();
   if (!windows) log.error('No windows are available');

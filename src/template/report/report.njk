@@ -7,11 +7,12 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1">
     <title>Baseline</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <script src="/js/alpine.js"></script>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' 'unsafe-inline';" />
+    <script src="/js/report.js"></script>
+    <script src="/js/alpine.js"></script>
 </head>
 
-<body class="h-screen overflow-hidden flex" x-data="{tab: 'users'}">
+<body class="h-screen overflow-hidden flex" x-data="init()">
     <div class="w-full h-screen p-8 overflow-y-auto">
         <h1 class="text-4xl font-bold mb-6">Baseline Auditing Result</h1>
         {% include './header.njk' %}

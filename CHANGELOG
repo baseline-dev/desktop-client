@@ -6,6 +6,12 @@
 * Supported services are consumed from the API.
 * Electron app supports auto updating.
 
+## v0.0.60
+
+### Fixes
+
+* Errors in reports were not rendering correctly and doc links were not opening in the browser.
+
 ## v0.0.59
 
 ### Fixes

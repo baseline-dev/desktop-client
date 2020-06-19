@@ -18,3 +18,17 @@ If you don't yet have access to Baseline, please head over to https://baseline.d
 ## Running the application
 
 Simply download the application and move it to your applications folder.
+
+## Building and Signing the application
+
+1. Create a file called `electron-builder.env` and add the following contents:
+
+```
+CSC_IDENTITY_AUTO_DISCOVERY=false
+GH_TOKEN=GITHUB_TOKEN
+CSC_NAME=DEVELOPER_IDENTITY
+APPLEID=DEVELOPER_ACCOUNT@EMAIL.COM
+APPLEIDPASS=DEVELOPER_ACCOUNT_PASSWORD
+```
+
+You can then run `npm run release` to sign the application.

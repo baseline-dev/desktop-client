@@ -24,13 +24,21 @@ const store = new Store();
 ipcMain.handle('/baseline/audits', async () => {
   const dir = app.getPath('userData');
   const source = path.join(dir, 'reports');
-  const isDirectory = source => lstatSync(source).isDirectory();
-  return {
-    status: 'ok',
-    result: readdirSync(path.resolve(source))
+
+  let result;
+  try {
+    const isDirectory = source => lstatSync(source).isDirectory();
+    result = readdirSync(path.resolve(source))
       .map(name => path.join(source, name))
       .filter(isDirectory)
-      .map(source => path.basename(source))
+      .map(source => path.basename(source));
+  } catch(e) {
+    result = [];
+  }
+
+  return {
+    status: 'ok',
+    result
   }
 });
 

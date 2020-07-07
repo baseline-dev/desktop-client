@@ -80,7 +80,7 @@
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^2.1.2",
     "autoprefixer": "^9.7.6",
-    "electron": "^8.2.3",
+    "electron": "^8.2.4",
     "electron-builder": "^22.5.1",
     "electron-notarize": "^0.3.0",
     "node-env-file": "^0.1.8",

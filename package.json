@@ -67,7 +67,7 @@
     "electron-store": "^5.2.0",
     "electron-updater": "^4.3.4",
     "esm": "^3.2.25",
-    "got": "^10.7.0",
+    "got": "^11.8.5",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^8.0.8",
